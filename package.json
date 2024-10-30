@@ -8,5 +8,8 @@
     "eslint": "^9.13.0",
     "eslint-plugin-react": "^7.37.1",
     "globals": "^15.11.0"
-  }
+  },
+  "workspaces":[
+    "packages/*"
+  ]
 }
