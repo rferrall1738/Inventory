@@ -20,6 +20,10 @@ function addUser(user) {
   return promise;
 }
 
+function getUsers(user) {
+  return userModel.find({})
+}
+
 function findUserByEmail(email) {
   return userModel.find({ email: email });
 }
@@ -32,4 +36,5 @@ export default {
   addUser,
   findUserById,
   deleteUser,
+  getUsers
 };

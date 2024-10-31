@@ -4,12 +4,52 @@ function UserLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log('Username:', username);
-    console.log('Password:', password);
+  const handleLogin = async (event) => {
+    event.preventDefault(); // Prevents the default form submission behavior
+
+    // Grabs what is in the "name" field under the <input>
+    const username = event.target.elements.username.value;
+    const password = event.target.elements.password.value;
+  
     // Implement authentication logic here
+
+    const loginData = {
+      username: username,
+      password: password
+    };
+
+    //Debug statements
+    console.log("Username", loginData.username);
+    console.log('Password:', loginData.password);
+
+    try {
+      // Post Request
+      const response = await fetch('Http://localhost:8000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (response.ok) {
+        const data = await response.json(); // Assume the backend returns JSON
+        console.log('Login successful:', data);
+
+        // Clear fields
+        event.target.elements.username.value = '';
+        event.target.elements.password.value = '';
+
+      } else {
+        console.error('Login failed:', response.statusText);
+        // Handle login failure (e.g., show error message to user)
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      // Handle network or other errors
+    }
   };
+  
 
   return (
     <div className="container" style={styles.container}>
@@ -19,6 +59,7 @@ function UserLogin() {
           <label>Username:</label>
           <input
             type="text"
+            name="username" // From event.target.elements.username.value in handleLogin function
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             style={styles.input}
@@ -28,12 +69,14 @@ function UserLogin() {
           <label>Password:</label>
           <input
             type="password"
+            name="password" // From event.target.elements.password.value in handleLogin function
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             style={styles.input}
           />
         </div>
         <button type="submit" style={styles.button}>Login</button>
+
       </form>
     </div>
   );

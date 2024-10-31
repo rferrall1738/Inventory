@@ -1,32 +1,35 @@
 import express from "express";
 import cors from "cors";
-import userServices from "./user-services.js";
+import userServices from "./user-services.js"; //Might use this later
 
 const app = express();
 const port = 8000;
+
+const loginData = []
 
 app.use(cors());
 
 app.use(express.json());
 
-app.post("/users", async (req, res) => {
-  const user = req.body;
-  const savedUser = await userServices.addUser(user);
-  if (savedUser) res.status(201).send(savedUser);
+app.post("/login", async (req, res) => {
+  const {username, password} = req.body;
+
+  // Debug statements
+  console.log("Received username: ", username)
+  console.log("Received Password: ", password)
+  
+  const newUser = { username, password, timestamp: new Date()}; 
+  loginData.push(newUser)
+  if (newUser) res.status(201).send(loginData);
   else res.status(500).end();
 });
 
-app.get("/users", async (req, res) => {
-  const name = req.query["name"];
-  const job = req.query["job"];
-  try {
-    const result = await userServices.getUsers(name, job);
-    res.send({users_list: result});
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error ocurred in the server.")
-  }
+app.get("/login", async (req, res) => {
+  res.json(loginData)
 });
+
+
+/* NOTE: These functions aren't being used but we might want them later
 
 app.get("/users/:id", async (req, res) => {
   const id = req.params["id"];
@@ -35,7 +38,7 @@ app.get("/users/:id", async (req, res) => {
     res.status(404).send("Resource not found.");
   } else {
     res.send({users_list: result});
-  }
+ }
 });
 
 app.delete("/users/:id", async (req, res) => {
@@ -48,13 +51,10 @@ app.delete("/users/:id", async (req, res) => {
     if (deletedUser) res.status(204).send("User deleted.")
   }
 });
-
-app.get("/users", (req, res) => {
-  res.send(users);
-});
+*/
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Add /login to this URL for a list of usernames and passwords!");
 });
 
 app.listen(port, () => {
