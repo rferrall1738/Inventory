@@ -49,6 +49,11 @@ function UserLogin() {
       // Handle network or other errors
     }
   };
+
+  function HomePage()
+  {
+    window.location.href = '/home';
+  }
   
 
   return (
@@ -75,7 +80,10 @@ function UserLogin() {
             style={styles.input}
           />
         </div>
-        <button type="submit" style={styles.button}>Login</button>
+          <button type="submit" style={styles.button} onClick={HomePage}>
+            Login
+          </button>
+          
 
       </form>
     </div>
