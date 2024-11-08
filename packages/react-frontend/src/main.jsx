@@ -1,7 +1,7 @@
 // src/main.jsx
 import React from "react";
 import ReactDOMClient from "react-dom/client";
-import InventoryLogin from "./InventoryLogin";
+import App from "./App"
 import "./main.css";
 
 const container = document.getElementById("root");
@@ -10,4 +10,4 @@ const container = document.getElementById("root");
 const root = ReactDOMClient.createRoot(container);
 
 // Initial render:
-root.render(<InventoryLogin/>);
+root.render(<App/>);
