@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import userServices from "./user-services.js"; //Might use this later
-
+import userServices from "./user-services.js"; 
+import bcrypt from 'bcrypt'
 const app = express();
 const port = 8000;
 
@@ -11,17 +11,48 @@ app.use(cors());
 
 app.use(express.json());
 
-app.post("/login", async (req, res) => {
-  const {username, password} = req.body;
 
+
+app.post("/signup", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    console.log("Sign up email:", email);
+    const existingUser = await userServices.findUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).send("User already exists");
+    }
+    const createdUser = await userServices.addUser({ email, password });
+    res.status(201).json(createdUser);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error during registration");
+  }
+});
+
+
+app.post("/login", async (req, res) => {
+  try{
+    const {username: email, password} = req.body;
+  
   // Debug statements
   console.log("Received username: ", username)
   console.log("Received Password: ", password)
   
-  const newUser = { username, password, timestamp: new Date()}; 
-  loginData.push(newUser)
-  if (newUser) res.status(201).send(loginData);
-  else res.status(500).end();
+  const createdUser = await userServices.findUserByEmail({email});
+  if (!createdUser){
+    return res.status(404).send("User not in the database");
+  }
+  const isFound = await bcrypt.compare(password, user.password);
+  if (!isFound) {
+    return res.status(401).send("Not valid")
+  }
+
+  res.status(201).json(createdUser);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error");
+  }
 });
 
 app.get("/login", async (req, res) => {

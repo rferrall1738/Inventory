@@ -1,23 +1,29 @@
 import mongoose from "mongoose";
 import userModel from "./user.js";
+import bcrypt from "bcrypt";
+import dotenv from 'dotenv';
+dotenv.config();
 
 mongoose.set("debug", true);
 
 mongoose
-  .connect("mongodb://localhost:27017/users", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .catch((error) => console.log(error));
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to MongoDB Atlas"))
+  .catch((error) => console.log("Connection error",error));
+
+
+async function addUser(user) {
+  console.log("OG password",user.password);
+  const saltRounds = 10;
+  user.password = await bcrypt.hash(user.password, saltRounds)
+  console.log("Hashed Password",user.password);
+
+  const userToAdd = new userModel(user);
+  return userToAdd.save();
+}
 
 function findUserById(id) {
   return userModel.findById(id);
-}
-
-function addUser(user) {
-  const userToAdd = new userModel(user);
-  const promise = userToAdd.save();
-  return promise;
 }
 
 function getUsers(user) {
@@ -25,7 +31,7 @@ function getUsers(user) {
 }
 
 function findUserByEmail(email) {
-  return userModel.find({ email: email });
+  return userModel.findOne({email:email});
 }
 
 function deleteUser(id){
