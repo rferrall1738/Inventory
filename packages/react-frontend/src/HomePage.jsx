@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 const items = [
-  { id: 1, title: "Lost Wallet", location: "Library", description: "Black leather wallet" },
-  { id: 2, title: "Found Keychain", location: "Dining Hall", description: "Red keychain with keys" },
-  { id: 3, title: "Lost Backpack", location: "Engineering Building", description: "Blue backpack with laptop" },
-  { id: 4, title: "Found Water Bottle", location: "Gym", description: "Green water bottle with stickers" },
-  { id: 5, title: "Lost Headphones", location: "Student Center", description: "Wireless headphones in a black case" },
-  { id: 6, title: "Found Sunglasses", location: "Parking Lot C", description: "Black sunglasses with polarized lenses" },
-  { id: 7, title: "Lost Notebook", location: "Coffee Shop", description: "Red notebook with math notes" },
-  { id: 8, title: "Found Calculator", location: "Math Lab", description: "Graphing calculator with initials" },
+  { id: 1, title: "Lost Wallet", location: "Library", date: "10-03-2024", description: "Black leather wallet" },
+  { id: 2, title: "Found Keychain", location: "Dining Hall", date: "11-24-2023", description: "Red keychain with keys" },
+  { id: 3, title: "Lost Backpack", location: "Engineering Building", date: "12-06-2024", description: "Blue backpack with laptop" },
+  { id: 4, title: "Found Water Bottle", location: "Gym", date: "10-09-2024", description: "Green water bottle with stickers" },
+  { id: 5, title: "Lost Headphones", location: "Student Center", date: "6-8-2024", description: "Wireless headphones in a black case" },
+  { id: 6, title: "Found Sunglasses", location: "Parking Lot C", date: "1-22-2024", description: "Black sunglasses with polarized lenses" },
+  { id: 7, title: "Lost Notebook", location: "Coffee Shop", date: "2-17-2024", description: "Red notebook with math notes" },
+  { id: 8, title: "Found Calculator", location: "Math Lab", date: "9-11-2024", description: "Graphing calculator with initials" },
 ];
 
 const HomePage = () => {
@@ -40,6 +40,7 @@ const HomePage = () => {
             <div style={styles.imagePlaceholder}></div>
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.title}</h2>
+              <p style={styles.date}>Date: {item.date}</p>
               <p style={styles.location}>📍 {item.location}</p>
             </div>
           </div>
