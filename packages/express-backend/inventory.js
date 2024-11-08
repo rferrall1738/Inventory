@@ -12,13 +12,13 @@ const InventorySchema = new mongoose.Schema(
                 }
             },
         },
-        Catagory:{
+        Category:{
             type: String,
             required: true,
             trim: true,
             enum:{
                 values:["backpacks","bikes","clothing","jewelry","keys/wallet","other","technology"],
-                message: '{VAULE} is not a valid catagory. Valid catagories are: backpacks, bikes, clothing, jewelry, keys/wallet, other,and technology.'
+                message: '{VALUE} is not a valid category. Valid categories are: backpacks, bikes, clothing, jewelry, keys/wallet, other,and technology.'
             }
         },
         Location:{
@@ -79,6 +79,6 @@ const InventorySchema = new mongoose.Schema(
     },
     {collection: "Inventory"}
 );
-const Inventory = mongoose.model("Inventory", InventorySchema);
+const inventory = mongoose.model("Inventory", InventorySchema);
 
-export default Inventory
+export default inventory
