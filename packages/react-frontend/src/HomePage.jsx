@@ -33,7 +33,8 @@ const HomePage = () => {
   const filteredItems = items.filter(
     (item) =>
       item.Item.toLowerCase().includes(search.toLowerCase()) ||
-      item.Location.toLowerCase().includes(search.toLowerCase())
+      item.Location.toLowerCase().includes(search.toLowerCase())||
+      item.Category.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -52,6 +53,7 @@ const HomePage = () => {
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.Item}</h2>
               <p style={styles.date}>Date: {item.Date}</p>
+              <p style={styles.category}>Category: {item.Category}</p>
               <p style={styles.location}>📍 {item.Location}</p>
             </div>
           </div>

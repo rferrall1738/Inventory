@@ -17,8 +17,8 @@ const InventorySchema = new mongoose.Schema(
             required: true,
             trim: true,
             enum:{
-                values:["backpacks","bikes","clothing","jewelry","keys/wallet","other","technology"],
-                message: '{VALUE} is not a valid category. Valid categories are: backpacks, bikes, clothing, jewelry, keys/wallet, other,and technology.'
+                values:["Backpacks","Bikes","Clothing","Jewelry","Keys/Wallet","Other","Technology"],
+                message: '{VALUE} is not a valid category. Valid categories are: Backpacks, Bikes, Clothing, Jewelry, Keys/Wallet, Other,and Technology.'
             }
         },
         Location:{
