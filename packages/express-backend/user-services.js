@@ -42,5 +42,6 @@ export default {
   addUser,
   findUserById,
   deleteUser,
-  getUsers
+  getUsers,
+  findUserByEmail
 };
