@@ -76,7 +76,15 @@ const InventorySchema = new mongoose.Schema(
                 message: props => `${props.date} is not in the proper format. Use 10-31-2024 for example`
             },
         },
+        Lat: {
+            type: Number,
+            required: true,
+        },
+        Lng: {
+            type: Number,
+            required: true,
     },
+},
     {collection: "Inventory"}
 );
 const inventory = mongoose.model("Inventory", InventorySchema);

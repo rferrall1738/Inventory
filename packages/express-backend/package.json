@@ -20,6 +20,7 @@
     "mongoose": "^8.8.1"
   },
   "devDependencies": {
+    "axios": "^1.7.7",
     "eslint": "^8.57.1",
     "eslint-config-standard": "^17.1.0"
   }

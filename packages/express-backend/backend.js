@@ -57,7 +57,12 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/login", async (req, res) => {
-  res.json(loginData)
+  try{
+    const users = await userServices.getUsers();
+      res.json(users)
+  } catch (error){
+    res.status(500).send("error")
+  }
 });
 
 app.get("/items", async (req, res) => {
@@ -86,6 +91,19 @@ app.post("/items", async (req,res) => {
     res.status(500).send("Error")
   }
 })
+
+app.delete("/items", async (req,res) => {
+  const item =req.params["item"];
+  const itemToDelete = await inventoryServices.findItem(item);
+if (itemToDelete === undefined || itemToDelete === null){
+  res.status(404).send("Item not found.");
+}else {
+  const deletedItem = await inventoryServices.deleteItem(item)
+  if (deletedItem) res.status(204).send("Item deleted")
+}
+});
+
+
 
 
 /* NOTE: These functions aren't being used but we might want them later

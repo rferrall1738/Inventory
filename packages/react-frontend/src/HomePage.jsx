@@ -1,10 +1,12 @@
 import React, { useState ,useEffect} from "react";
+import SmallMap from './Map'
 
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() =>{
     const getItems = async () => {
@@ -37,6 +39,9 @@ const HomePage = () => {
       item.Category.toLowerCase().includes(search.toLowerCase())
   );
 
+ 
+
+
   return (
     <div style={styles.container}>
       <div style={styles.fixedHeader}>
@@ -48,13 +53,14 @@ const HomePage = () => {
       </div>
       <div style={styles.grid}>
         {filteredItems.map((item) => (
-          <div key={item.item} style={styles.card}>
+          <div key={item.id || item.Item} style={styles.card}>
             <div style={styles.imagePlaceholder}></div>
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.Item}</h2>
               <p style={styles.date}>Date: {item.Date}</p>
               <p style={styles.category}>Category: {item.Category}</p>
               <p style={styles.location}>📍 {item.Location}</p>
+              <SmallMap lat={item.Lat} lng={item.Lng} />
             </div>
           </div>
         ))}
