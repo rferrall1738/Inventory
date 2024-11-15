@@ -1,25 +1,25 @@
 import React, { useState } from "react";
 
 function UserLogin() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
 
   const handleLogin = async (event) => {
     event.preventDefault(); // Prevents the default form submission behavior
 
     // Grabs what is in the "name" field under the <input>
+    const username = event.target.elements.username.value;
+    const password = event.target.elements.password.value;
   
     // Implement authentication logic here
 
     const loginData = {
-      email: event.target.elements.email.value,
-      password: event.target.elements.password.value
+      username: username,
+      password: password
     };
 
     //Debug statements
-    console.log("Email", loginData.email);
+    console.log("Username", loginData.username);
     console.log('Password:', loginData.password);
 
     try {
@@ -31,29 +31,15 @@ function UserLogin() {
         },
         body: JSON.stringify(loginData),
       });
-      const data = await response.json() // Assume the backend returns JSON
 
-      if (response.status === 200) {
-        setSuccessMessage("Login Successful. Redirecting...");
-        setErrorMessage('');
+      if (response.ok) {
+        const data = await response.json(); // Assume the backend returns JSON
         console.log('Login successful:', data);
 
-        setTimeout(() => {
-          window.location.href = '/home';
-        }, 2000);
-        
-        // Clear fields/
-        event.target.elements.email.value = '';
+        // Clear fields
+        event.target.elements.username.value = '';
         event.target.elements.password.value = '';
 
-      } else if (response.status === 404){
-        console.error('User not found. Check credentials or sign up.')
-        setErrorMessage(data.message || "User not found. Check credentials or sign up.");
-        setSuccessMessage('');
-      } else if (response.status === 401) {
-        console.error('Invalid Password')
-        setErrorMessage(data.message || "Invalid Password");
-        setSuccessMessage('')
       } else {
         console.error('Login failed:', response.statusText);
         // Handle login failure (e.g., show error message to user)
@@ -64,19 +50,23 @@ function UserLogin() {
     }
   };
 
+  function HomePage()
+  {
+    window.location.href = '/home';
+  }
+  
+
   return (
     <div className="container" style={styles.container}>
       <h2>Login to PolyFinder</h2>
-      {errorMessage && <p style={{color: "red"}}>{errorMessage}</p>}
-      {successMessage && <p style={{color: "green" }}>{successMessage}</p>}
       <form onSubmit={handleLogin} style={styles.form}>
         <div style={styles.field}>
-          <label>Email:</label>
+          <label>Username:</label>
           <input
             type="text"
-            name="email" // From event.target.elements.email.value in handleLogin function
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="username" // From event.target.elements.username.value in handleLogin function
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             style={styles.input}
           />
         </div>
@@ -90,7 +80,7 @@ function UserLogin() {
             style={styles.input}
           />
         </div>
-          <button type="submit" style={styles.button}>
+          <button type="submit" style={styles.button} onClick={HomePage}>
             Login
           </button>
           

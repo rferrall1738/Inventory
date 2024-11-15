@@ -12,6 +12,8 @@ app.use(cors());
 
 app.use(express.json());
 
+
+
 app.post("/signup", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -32,25 +34,25 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try{
-    const {email, password} = req.body;
-    console.log(req.body)
-  // Debug statements
-    console.log("Received email: ", email)
-    console.log("Received Password: ", password)
+    const {username: email, password} = req.body;
   
-    const user = await userServices.findUserByEmail(email);
-    if (!user){
-      return res.status(404).json({message: "User not in the database"});
-    }
-    const isFound = await bcrypt.compare(password, user.password);
-    if (!isFound) {
-      return res.status(401).json({message: "Invalid credentials"});
-    }
-    res.status(200).json({message: "Login successful: ", user});
-  } 
-  catch (error) {
+  // Debug statements
+  console.log("Received username: ", username)
+  console.log("Received Password: ", password)
+  
+  const createdUser = await userServices.findUserByEmail({email});
+  if (!createdUser){
+    return res.status(404).send("User not in the database");
+  }
+  const isFound = await bcrypt.compare(password, user.password);
+  if (!isFound) {
+    return res.status(401).send("Not valid")
+  }
+
+  res.status(201).json(createdUser);
+  } catch (error) {
     console.log(error);
-    res.status(500).json({message: "Error"});
+    res.status(500).send("Error");
   }
 });
 
@@ -81,7 +83,7 @@ app.post("/items", async (req,res) => {
     res.status(201).json(createdItem);
   } catch (error){
     console.log(error);
-    res.status(500).json({message: "Error"})
+    res.status(500).send("Error")
   }
 })
 

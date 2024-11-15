@@ -6,10 +6,12 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      default: "",
       validate: {
-        validator: (email) => /^[^\s@]+@calpoly\.edu$/.test(email),
-        message: 'Invalid Cal Poly Email Address',
+        validator: function(email){
+            const calPolyEmailPattern = /^[^\s@]+@calpoly\.edu$/;
+            return calPolyEmailPattern.test(email)
+        },
+        message: props => `${props.value} is not a valid email address`
       }
     },
     password: {

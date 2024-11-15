@@ -26,6 +26,10 @@ function findUserById(id) {
   return userModel.findById(id);
 }
 
+function getUsers(user) {
+  return userModel.find({})
+}
+
 function findUserByEmail(email) {
   return userModel.findOne({email:email});
 }
@@ -38,5 +42,6 @@ export default {
   addUser,
   findUserById,
   deleteUser,
+  getUsers,
   findUserByEmail
 };
