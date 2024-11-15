@@ -36,7 +36,8 @@ const HomePage = () => {
     (item) =>
       item.Item.toLowerCase().includes(search.toLowerCase()) ||
       item.Location.toLowerCase().includes(search.toLowerCase())||
-      item.Category.toLowerCase().includes(search.toLowerCase())
+      item.Category.toLowerCase().includes(search.toLowerCase())||
+      item.Date.toLowerCase().includes(search.toLowerCase())
   );
 
  
