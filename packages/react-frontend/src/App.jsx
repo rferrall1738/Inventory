@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import UserLogin from './LoginForm';
+import Item from './Item';
 
 function App() {
     return (
@@ -8,6 +9,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<UserLogin />} />   {/* Login page */}
                 <Route path="/home" element={<HomePage />} />  {/* Home page */}
+                <Route path="/item/:id" element={<Item />} />
             </Routes>
         </BrowserRouter>
     );

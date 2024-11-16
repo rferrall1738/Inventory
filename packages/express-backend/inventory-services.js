@@ -12,6 +12,11 @@ mongoose.connect(process.env.MONGODB_URI)
 async function findItem(item) {
     return inventoryModel.findItem(item);
 }
+
+function findItemByID(item) {
+    return inventoryModel.findById(item);
+}
+
 function addItem(item){
     const itemToAdd = new inventoryModel(item);
     return itemToAdd.save();
@@ -24,7 +29,9 @@ function deleteItem(item){
 }
 export default {
     findItem,
+    findItemByID,
     addItem,
     deleteItem,
     getItems
+
 };

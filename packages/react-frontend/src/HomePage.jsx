@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, {useState, useEffect} from "react";
 
 
 const HomePage = () => {
@@ -37,6 +37,10 @@ const HomePage = () => {
       item.Category.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleGridClick = (item) => {
+    window.location.href = 'item/' + item._id;
+};
+
   return (
     <div style={styles.container}>
       <div style={styles.fixedHeader}>
@@ -46,9 +50,10 @@ const HomePage = () => {
              style={styles.profileImage}
         />
       </div>
+      
       <div style={styles.grid}>
         {filteredItems.map((item) => (
-          <div key={item.item} style={styles.card}>
+          <button key={item._id} onClick={() => handleGridClick(item)}>
             <div style={styles.imagePlaceholder}></div>
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.Item}</h2>
@@ -56,9 +61,10 @@ const HomePage = () => {
               <p style={styles.category}>Category: {item.Category}</p>
               <p style={styles.location}>📍 {item.Location}</p>
             </div>
-          </div>
+          </button>
         ))}
       </div>
+
       <div style={styles.searchBarContainer}>
         <input
           type="text"
