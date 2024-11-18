@@ -10,7 +10,6 @@ dotenv.config();
 const app = express();
 const port = 8000;
 
-const loginData = []
 
 app.use(cors());
 
