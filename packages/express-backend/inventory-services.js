@@ -38,6 +38,11 @@ async function getCoordinates(location) {
 async function findItem(item) {
     return inventoryModel.findOne(item);
 }
+
+function findItemByID(item) {
+    return inventoryModel.findById(item);
+}
+
 async function addItem(item){
     const coordinates = await getCoordinates(item.Location);
 
@@ -58,7 +63,9 @@ async function deleteItem(item){
 }
 export default {
     findItem,
+    findItemByID,
     addItem,
     deleteItem,
     getItems
+
 };

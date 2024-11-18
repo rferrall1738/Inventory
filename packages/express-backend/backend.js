@@ -146,18 +146,21 @@ function authorizeUser(req, res, next) {
 
 
 
-
-/* NOTE: These functions aren't being used but we might want them later
-
-app.get("/users/:id", async (req, res) => {
+app.get("/items/:id", async (req, res) => {
+  // console.log(req.body)
   const id = req.params["id"];
-  const result = await userServices.findUserById(id);
+  console.log("Id is ", id)
+  const result = await inventoryServices.findItemByID(id);
+  console.log("Result is", result)
   if (result === undefined || result === null){
     res.status(404).send("Resource not found.");
   } else {
-    res.send({users_list: result});
+    res.send(result);
  }
 });
+
+
+/* NOTE: These functions aren't being used but we might want them later
 
 app.delete("/users/:id", async (req, res) => {
   const id = req.params["id"];

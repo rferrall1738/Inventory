@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import UserLogin from './LoginForm';
+import Item from './Item';
 import UserSignup from './SignUpPage';
 import ProtectedRoutes from './ProtectedRoutes'
-
 
 function App() {
     const isAuthenticated = localStorage.getItem('token') ? true:false;
@@ -17,6 +17,7 @@ function App() {
                 {/* Private Routes */}
                 <Route element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}>
                     <Route path="/home" element={<HomePage />} />
+                    <Route path="/item/:id" element={<Item />} />
                 </Route>
             </Routes>
         </BrowserRouter>

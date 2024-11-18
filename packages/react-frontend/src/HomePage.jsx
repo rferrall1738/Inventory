@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import SmallMap from './Map'
 
 
@@ -44,8 +44,9 @@ const HomePage = () => {
       item.Date.toLowerCase().includes(search.toLowerCase())
   );
 
- 
-
+  const handleGridClick = (item) => {
+    window.location.href = 'item/' + item._id;
+};
 
   return (
     <div style={styles.container}>
@@ -57,9 +58,10 @@ const HomePage = () => {
         />
         <button onClick={handleLogout} style={styles.logoutButton}>Log Out</button>
       </div>
+      
       <div style={styles.grid}>
         {filteredItems.map((item) => (
-          <div key={item.id || item.Item} style={styles.card}>
+          <button key={item._id || item.Item} onClick={() => handleGridClick(item)}>
             <div style={styles.imagePlaceholder}></div>
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.Item}</h2>
@@ -68,9 +70,10 @@ const HomePage = () => {
               <p style={styles.location}>📍 {item.Location}</p>
               <SmallMap lat={item.Lat} lng={item.Lng} />
             </div>
-          </div>
+          </button>
         ))}
       </div>
+
       <div style={styles.searchBarContainer}>
         <input
           type="text"
