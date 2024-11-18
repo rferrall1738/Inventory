@@ -1,5 +1,6 @@
 import React, { useState ,useEffect} from "react";
 import { useParams } from "react-router-dom";
+import SmallMap from "./Map";
 
 const Item = () =>
 {
@@ -53,6 +54,7 @@ const Item = () =>
               <p style={styles.date}>Date: {item.Date}</p>
               <p style={styles.category}>Category: {item.Category}</p>
               <p style={styles.location}>📍 {item.Location}</p>
+              <SmallMap lat={item.Lat} lng={item.Lng} />
             </div>
           </div>
       </div>
