@@ -3,6 +3,7 @@ import React, { useState } from "react";
 function UserLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword,setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -34,15 +35,17 @@ function UserLogin() {
       const data = await response.json() // Assume the backend returns JSON
 
       if (response.status === 200) {
+        console.log(data.token)
         setSuccessMessage("Login Successful. Redirecting...");
         setErrorMessage('');
+        localStorage.setItem("token", data.token);
         console.log('Login successful:', data);
 
         setTimeout(() => {
           window.location.href = '/home';
         }, 2000);
         
-        // Clear fields/
+        // Clear fields//
         event.target.elements.email.value = '';
         event.target.elements.password.value = '';
 
@@ -51,7 +54,7 @@ function UserLogin() {
         setErrorMessage(data.message || "User not found. Check credentials or sign up.");
         setSuccessMessage('');
       } else if (response.status === 401) {
-        console.error('Invalid Password')
+        console.error('Invalid Password');
         setErrorMessage(data.message || "Invalid Password");
         setSuccessMessage('')
       } else {
@@ -81,17 +84,33 @@ function UserLogin() {
           />
         </div>
         <div style={styles.field}>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password" // From event.target.elements.password.value in handleLogin function
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-          />
-        </div>
+  <label>Password:</label>
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    style={styles.input}
+  />
+  <div style={styles.checkboxContainer}>
+    <input
+      type="checkbox"
+      id="showPassword"
+      checked={showPassword}
+      onChange={() => setShowPassword(!showPassword)}
+      style={styles.checkbox}
+    />
+    <label htmlFor="showPassword" style={styles.checkboxLabel}>
+      Show Password
+      </label>
+      </div>
+      </div>
           <button type="submit" style={styles.button}>
             Login
+          </button>
+          <button type="button" onClick={() => (window.location.href = '/signup')} // Redirect to signup page
+          style={{ ...styles.button, backgroundColor: '#f8c471', marginTop: '10px' }}>
+            Signup
           </button>
           
 
@@ -112,6 +131,7 @@ const styles = {
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
     backgroundColor: '#f8f8f8', // Soft white background
   },
+ 
   form: {
     display: 'flex',
     flexDirection: 'column',
@@ -121,6 +141,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'start',
+    width: '100%',
   },
   input: {
     padding: '12px',

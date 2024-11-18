@@ -3,6 +3,10 @@ import cors from "cors";
 import userServices from "./user-services.js"; 
 import inventoryServices from "./inventory-services.js";
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 const app = express();
 const port = 8000;
 
@@ -19,14 +23,32 @@ app.post("/signup", async (req, res) => {
     console.log("Sign up email:", email);
     const existingUser = await userServices.findUserByEmail(email);
     if (existingUser) {
-      return res.status(409).send("User already exists");
+      return res.status(409).json({nessage: "User already exists"});
     }
-    const createdUser = await userServices.addUser({ email, password });
+    const createdUser = await userServices.addUser( {email, password} );
     res.status(201).json(createdUser);
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error during registration");
+    res.status(500).json({message:"Error during registration"});
   }
+});
+
+app.get("/auth-user", (req, res) => {
+  console.log("Received request to /auth-user");
+  const authHeader = req.headers["authorization"];
+  console.log("Authorization header:", authHeader);
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Token Missing or invalid" });
+  }
+  jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+    if (err) {
+      console.log("JWT verification error:", err);
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+    console.log("User authenticated:", user);
+    res.status(200).json({ message: "Authenticated", user });
+  });
 });
 
 
@@ -46,7 +68,8 @@ app.post("/login", async (req, res) => {
     if (!isFound) {
       return res.status(401).json({message: "Invalid credentials"});
     }
-    res.status(200).json({message: "Login successful: ", user});
+    const token = jwt.sign({email}, process.env.SECRET_KEY, {expiresIn: "15m"});
+    res.status(200).json({message: "Login Successful. Redirecting...", user, token});
   } 
   catch (error) {
     console.log(error);
@@ -55,8 +78,15 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/login", async (req, res) => {
-  res.json(loginData)
+  try{
+    const users = await userServices.getUsers();
+      res.json(users)
+  } catch (error){
+    res.status(500).send("error")
+  }
 });
+
+
 
 app.get("/items", async (req, res) => {
   try{
@@ -84,7 +114,37 @@ app.post("/items", async (req,res) => {
     console.log(error);
     res.status(500).json({message: "Error"})
   }
-})
+});
+
+app.delete("/items", async (req,res) => {
+  const item =req.params["item"];
+  const itemToDelete = await inventoryServices.findItem(item);
+if (itemToDelete === undefined || itemToDelete === null){
+  res.status(404).send("Item not found.");
+}else {
+  const deletedItem = await inventoryServices.deleteItem(item)
+  if (deletedItem) res.status(204).send("Item deleted")
+}
+});
+
+
+function authorizeUser(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) {
+    res.status(401).end();
+  } else {
+    jwt.verify(token, process.env.SECRET_KEY,
+      (error, decoded) => {
+        if (decoded) { next(); }
+        else { res.status(401).end(); }
+      }
+    );
+  }
+}
+
+
+
 
 app.get("/items/:id", async (req, res) => {
   // console.log(req.body)

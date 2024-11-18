@@ -1,17 +1,23 @@
 import React, {useState, useEffect} from "react";
+import SmallMap from './Map'
 
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/login'
+  };
 
   useEffect(() =>{
     const getItems = async () => {
       try{
         const response = await fetch("http://localhost:8000/items");
         if (!response.ok) {
-          throw new Error('Error fetching items: status ${response.status}');
+          throw new Error(`Error fetching items: status ${response.status}`);
         }
         const data = await response.json();
         setItems(data);
@@ -34,7 +40,8 @@ const HomePage = () => {
     (item) =>
       item.Item.toLowerCase().includes(search.toLowerCase()) ||
       item.Location.toLowerCase().includes(search.toLowerCase())||
-      item.Category.toLowerCase().includes(search.toLowerCase())
+      item.Category.toLowerCase().includes(search.toLowerCase())||
+      item.Date.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleGridClick = (item) => {
@@ -49,17 +56,19 @@ const HomePage = () => {
         <img src="polyfinder.png" // Replace with actual user image URL
              style={styles.profileImage}
         />
+        <button onClick={handleLogout} style={styles.logoutButton}>Log Out</button>
       </div>
       
       <div style={styles.grid}>
         {filteredItems.map((item) => (
-          <button key={item._id} onClick={() => handleGridClick(item)}>
+          <button key={item._id || item.Item} onClick={() => handleGridClick(item)}>
             <div style={styles.imagePlaceholder}></div>
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.Item}</h2>
               <p style={styles.date}>Date: {item.Date}</p>
               <p style={styles.category}>Category: {item.Category}</p>
               <p style={styles.location}>📍 {item.Location}</p>
+              <SmallMap lat={item.Lat} lng={item.Lng} />
             </div>
           </button>
         ))}
@@ -119,6 +128,19 @@ const styles = {
     border: "none", // Remove any borders
     cursor: "pointer",
     padding: "0", // No padding around the plus sign
+  },
+  logoutButton: {
+    position: "fixed",      // Fix the position of the button relative to the viewport
+    bottom: "20px",         // Position it 20px from the bottom
+    right: "20px",          // Position it 20px from the right
+    backgroundColor: "#e74c3c", // Red color for logout button
+    color: "#fff",          // White text color
+    padding: "10px 20px",   // Padding for the button
+    border: "none",         // Remove border
+    borderRadius: "5px",    // Rounded corners for the button
+    cursor: "pointer",      // Cursor pointer for the button
+    fontSize: "16px",       // Font size of the button
+    zIndex: "1000",         // Ensure it's above other elements
   },
   grid: {
     display: "grid",
