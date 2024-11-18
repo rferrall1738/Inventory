@@ -12,13 +12,12 @@ function App() {
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<UserLogin />} />   {/* Login page */}
-                <Route path="/home" element={<HomePage />} />  {/* Home page */}
-                <Route path="/item/:id" element={<Item />} />
                 <Route path="/login" element={<UserLogin />} /> {/*Signup page */}
                 <Route path="/signup" element={<UserSignup />} /> {/*Signup page */}
                 {/* Private Routes */}
                 <Route element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}>
                     <Route path="/home" element={<HomePage />} />
+                    <Route path="/item/:id" element={<Item />} />
                 </Route>
             </Routes>
         </BrowserRouter>
