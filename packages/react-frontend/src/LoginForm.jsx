@@ -35,15 +35,17 @@ function UserLogin() {
       const data = await response.json() // Assume the backend returns JSON
 
       if (response.status === 200) {
+        console.log(data.token)
         setSuccessMessage("Login Successful. Redirecting...");
         setErrorMessage('');
+        localStorage.setItem("token", data.token);
         console.log('Login successful:', data);
 
         setTimeout(() => {
           window.location.href = '/home';
         }, 2000);
         
-        // Clear fields/
+        // Clear fields//
         event.target.elements.email.value = '';
         event.target.elements.password.value = '';
 
@@ -52,7 +54,7 @@ function UserLogin() {
         setErrorMessage(data.message || "User not found. Check credentials or sign up.");
         setSuccessMessage('');
       } else if (response.status === 401) {
-        console.error('Invalid Password')
+        console.error('Invalid Password');
         setErrorMessage(data.message || "Invalid Password");
         setSuccessMessage('')
       } else {

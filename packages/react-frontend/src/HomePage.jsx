@@ -7,13 +7,17 @@ const HomePage = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/login'
+  };
 
   useEffect(() =>{
     const getItems = async () => {
       try{
         const response = await fetch("http://localhost:8000/items");
         if (!response.ok) {
-          throw new Error('Error fetching items: status ${response.status}');
+          throw new Error(`Error fetching items: status ${response.status}`);
         }
         const data = await response.json();
         setItems(data);
@@ -51,6 +55,7 @@ const HomePage = () => {
         <img src="polyfinder.png" // Replace with actual user image URL
              style={styles.profileImage}
         />
+        <button onClick={handleLogout} style={styles.logoutButton}>Log Out</button>
       </div>
       <div style={styles.grid}>
         {filteredItems.map((item) => (
@@ -120,6 +125,19 @@ const styles = {
     border: "none", // Remove any borders
     cursor: "pointer",
     padding: "0", // No padding around the plus sign
+  },
+  logoutButton: {
+    position: "fixed",      // Fix the position of the button relative to the viewport
+    bottom: "20px",         // Position it 20px from the bottom
+    right: "20px",          // Position it 20px from the right
+    backgroundColor: "#e74c3c", // Red color for logout button
+    color: "#fff",          // White text color
+    padding: "10px 20px",   // Padding for the button
+    border: "none",         // Remove border
+    borderRadius: "5px",    // Rounded corners for the button
+    cursor: "pointer",      // Cursor pointer for the button
+    fontSize: "16px",       // Font size of the button
+    zIndex: "1000",         // Ensure it's above other elements
   },
   grid: {
     display: "grid",
