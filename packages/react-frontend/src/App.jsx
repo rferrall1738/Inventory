@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
 import UserLogin from './LoginForm';
 import Item from './Item';
+import CreateItem from './CreateItem';
 import UserSignup from './SignUpPage';
 import ProtectedRoutes from './ProtectedRoutes'
 
@@ -18,6 +19,7 @@ function App() {
                 <Route element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}>
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/item/:id" element={<Item />} />
+                    <Route path="/create-item" element={<CreateItem/>} />
                 </Route>
             </Routes>
         </BrowserRouter>
