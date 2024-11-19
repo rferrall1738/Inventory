@@ -25,7 +25,7 @@ function UserLogin() {
 
     try {
       // Post Request
-      const response = await fetch('Http://localhost:8000/login', {
+      const response = await fetch('https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

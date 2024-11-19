@@ -11,7 +11,7 @@ const Item = () =>
     useEffect(() =>{
         const getItem = async () => {
           try{
-            const response = await fetch(`http://localhost:8000/items/${id}`);
+            const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items/${id}`);
             if (!response.ok) {
               throw new Error('Error fetching items: status ${response.status}');
             }

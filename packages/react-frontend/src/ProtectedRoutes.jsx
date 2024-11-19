@@ -13,7 +13,7 @@ const ProtectedRoutes = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/auth-user", {
+        const response = await fetch("https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/auth-user", {
           method: "GET",
           headers: {
             'Authorization': `Bearer ${token}`,
