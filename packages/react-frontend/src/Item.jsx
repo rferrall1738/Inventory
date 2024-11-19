@@ -2,6 +2,8 @@ import { useState ,useEffect} from "react";
 import { useParams } from "react-router-dom";
 import SmallMap from "./Map";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Item = () =>
 {
     const [item, setItem] = useState([]);
@@ -11,7 +13,7 @@ const Item = () =>
     useEffect(() =>{
         const getItem = async () => {
           try{
-            const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items/${id}`);
+            const response = await fetch(`${API_URL}/${id}`);
             if (!response.ok) {
               throw new Error('Error fetching items: status ${response.status}');
             }

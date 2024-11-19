@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function UserSignup() {
   
   const [email, setEmail] = useState('');
@@ -28,7 +30,7 @@ function UserSignup() {
 
     try {
       // Post request to the backend
-      const response = await fetch('https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/signup', {
+      const response = await fetch(`${API_URL}/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
