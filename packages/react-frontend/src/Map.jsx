@@ -1,4 +1,3 @@
-import React from 'react';
 import { GoogleMap, LoadScriptNext, Marker} from '@react-google-maps/api';
 
 const mapContainerStyle = {

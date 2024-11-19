@@ -126,7 +126,7 @@ if (itemToDelete === undefined || itemToDelete === null){
 }
 });
 
-
+// eslint-disable-next-line no-unused-vars
 function authorizeUser(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];

@@ -5,7 +5,15 @@ import pluginReact from "eslint-plugin-react";
 
 export default [
   {files: ["**/*.{js,mjs,cjs,jsx}"]},
-  {languageOptions: { globals: globals.node }},
+  {languageOptions: { 
+    globals: globals.node, 
+},
+settings: {
+  react: {
+    version: "detect",
+  },
+},
+  },
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
 ];

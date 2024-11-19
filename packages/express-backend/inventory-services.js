@@ -55,7 +55,7 @@ async function addItem(item){
     const itemToAdd = new inventoryModel(itemWithCoordinates);
     return itemToAdd.save();
 }
-function getItems(item){
+function getItems(){
     return inventoryModel.find({});
 }
 async function deleteItem(item){

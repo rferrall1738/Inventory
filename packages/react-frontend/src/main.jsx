@@ -1,5 +1,4 @@
 // src/main.jsx
-import React from "react";
 import ReactDOMClient from "react-dom/client";
 import App from "./App"
 import "./main.css";
