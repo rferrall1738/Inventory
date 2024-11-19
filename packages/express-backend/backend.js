@@ -11,7 +11,10 @@ const app = express();
 const port = 8000;
 
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://ambitious-wave-0b9c2fc1e.5.azurestaticapps.net', 
+  credentials: true,
+}));
 
 app.use(express.json());
 
