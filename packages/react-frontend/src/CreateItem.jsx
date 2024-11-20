@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios"; // Import axios to make HTTP requests
+
 
 const CreateItem = () => {
   const [formData, setFormData] = useState({
@@ -6,8 +8,10 @@ const CreateItem = () => {
     category: "",
     location: "",
     date: "",
-    photo: null,
   });
+
+  const [error, setError] = useState(null); // Optional: for error handling
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,29 +21,51 @@ const CreateItem = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      photo: e.target.files[0], 
-    }));
+  const getCoordinates = async (location) => {
+    const enhancedLocation = `${location}, Cal Poly, San Luis Obispo, CA`;
+    try {
+      const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+        params: {
+          address: enhancedLocation,
+          key: "AIzaSyDBMJyGYH7GNDXSJmdzO-kg7-iMHtzJFbE", //need to take this out for testing rn
+        },
+      });
+
+      if (response.data.status === "OK") {
+        const { lat, lng } = response.data.results[0].geometry.location;
+        return { lat, lng };
+      } else {
+        throw new Error("Geocoding API error");
+      }
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+      throw error;
+    }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/items", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      // Get coordinates for the location
+      const coordinates = await getCoordinates(formData.location);
 
-      if (!response.ok) {
+      // Create the item data to send, including coordinates
+      const itemWithCoordinates = {
+        ...formData,
+        Lat: coordinates.lat,
+        Lng: coordinates.lng,
+      };
+
+      // Send data to backend
+      const response = await axios.post("http://localhost:8000/items", itemWithCoordinates);
+
+      if (response.status === 201) {
+        alert("Item created successfully!");
+        window.location.href = "/home"; // Redirect after successful creation
+      } else {
         throw new Error(`Error creating item: ${response.status}`);
       }
-      alert("Item created successfully!");
-      window.location.href = "/home";
     } catch (error) {
       console.error("Error creating item:", error);
       alert("Failed to create item. Please try again.");
@@ -100,14 +126,6 @@ const CreateItem = () => {
           onChange={handleChange}
           style={styles.input}
           required
-        />
-        <input
-          type="file"
-          name="photo"
-          accept="image/*"
-          value={formData.photo}
-          onChange={handleFileChange}
-          style={styles.input}
         />
         <button type="submit" style={styles.submitButton}>
           Create Item
