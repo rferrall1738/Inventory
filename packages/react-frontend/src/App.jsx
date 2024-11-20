@@ -12,7 +12,7 @@ function App() {
             <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<UserLogin />} />   {/* Login page */}
-                <Route path="/login" element={<UserLogin />} /> {/*Signup page */}
+                <Route path="/login" element={<UserLogin />} /> {/* page */}
                 <Route path="/signup" element={<UserSignup />} /> {/*Signup page */}
                 {/* Private Routes */}
                 <Route element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}>

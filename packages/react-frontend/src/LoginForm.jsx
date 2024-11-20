@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const API_URL = import.meta.env.REACT_APP_API_URL;
-
+console.log("connected to:", API_URL.REACT_APP_API_URL)
 function UserLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
