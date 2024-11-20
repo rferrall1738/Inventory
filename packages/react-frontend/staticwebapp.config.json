@@ -12,7 +12,7 @@
       {
         "route": "/signup",
         "methods": ["GET", "POST"],
-        "redirect": "/login"
+        "redirect": "/signup"
       },
       {
         "route": "/home",
