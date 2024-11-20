@@ -13,6 +13,7 @@ const port = 8000;
 
 app.use(cors({
   origin: 'https://ambitious-wave-0b9c2fc1e.5.azurestaticapps.net/', 
+  methods: ["GET","POST","PUT","DELETE"],
   credentials: true,
 }));
 
