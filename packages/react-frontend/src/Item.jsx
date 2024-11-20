@@ -2,7 +2,7 @@ import { useState ,useEffect} from "react";
 import { useParams } from "react-router-dom";
 import SmallMap from "./Map";
 
-const API_URL = import.meta.env.REACT_APP_API_URL;
+const API_URL = import.meta.env.VITE_APP_API_URL;
 
 const Item = () =>
 {

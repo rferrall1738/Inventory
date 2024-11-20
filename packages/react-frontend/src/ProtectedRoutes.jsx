@@ -1,7 +1,7 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const API_URL = import.meta.env.REACT_APP_API_URL;
+const API_URL = import.meta.env.VITE_APP_API_URL;
 
 const ProtectedRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);

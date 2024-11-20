@@ -85,7 +85,7 @@ app.get("/login", async (req, res) => {
     const users = await userServices.getUsers();
       res.json(users)
   } catch (error){
-    res.status(500).send("error")
+    res.status(500).send("error",error)
   }
 });
 

@@ -6,18 +6,22 @@
     "routes": [
       {
         "route": "/login",
+        "methods": ["GET", "POST"],
         "rewrite": "/index.html"
       },
       {
         "route": "/signup",
+        "methods": ["GET", "POST"],
         "rewrite": "/index.html"
       },
       {
         "route": "/home",
+        "methods":["GET", "POST"],
         "rewrite": "/index.html"
       },
       {
         "route": "/item/*",
+        "methods":["GET","POST"],
         "rewrite": "/index.html"
       }
     ],
