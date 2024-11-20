@@ -27,9 +27,11 @@ function UserSignup() {
     };
 
     console.log("Sign-Up Data:", signupData);
+    console.log('Attempting to connect to', API_URL)
 
     try {
       // Post request to the backend
+      console.log("Sending POST request to:", `${API_URL}/signup`);
       const response = await fetch(`${API_URL}/signup`, {
         method: 'POST',
         headers: {
@@ -37,6 +39,8 @@ function UserSignup() {
         },
         body: JSON.stringify(signupData),
       });
+      console.log("Response received with status:", response.status);
+
 
       const data = await response.json();
 

@@ -12,7 +12,7 @@ const HomePage = () => {
     localStorage.removeItem('token');
     window.location.href = '/login'
   };
-
+  console.log('Attempting to connect to', API_URL)
   useEffect(() =>{
     const getItems = async () => {
       try{
