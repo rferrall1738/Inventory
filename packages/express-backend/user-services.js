@@ -21,7 +21,7 @@ async function addUser(user) {
   const userToAdd = new userModel(user);
   return userToAdd.save();
 }
-function getUsers(user) {
+function getUsers() {
   return userModel.find({})
 }
 
