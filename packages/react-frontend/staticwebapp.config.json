@@ -7,12 +7,14 @@
       {
         "route": "/login",
         "methods": ["GET", "POST"],
-        "rewrite": "/index.html"
+        "rewrite": "/index.html",
+        "redirect": "/home"
       },
       {
         "route": "/signup",
         "methods": ["GET", "POST"],
-        "rewrite": "/index.html"
+        "rewrite": "/index.html",
+        "redirect": "/login"
       },
       {
         "route": "/home",

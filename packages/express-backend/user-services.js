@@ -21,6 +21,9 @@ async function addUser(user) {
   const userToAdd = new userModel(user);
   return userToAdd.save();
 }
+function getUsers(user) {
+  return userModel.find({})
+}
 
 function findUserById(id) {
   return userModel.findById(id);
@@ -37,6 +40,7 @@ function deleteUser(id){
 export default {
   addUser,
   findUserById,
+  getUsers,
   deleteUser,
   findUserByEmail
 };
