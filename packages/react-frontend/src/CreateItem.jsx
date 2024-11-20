@@ -6,8 +6,7 @@ const CreateItem = () => {
     category: "",
     location: "",
     date: "",
-    lat: "",
-    lng: "",
+    photo: null,
   });
 
   const handleChange = (e) => {
@@ -15,6 +14,13 @@ const CreateItem = () => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      photo: e.target.files[0], 
     }));
   };
 
@@ -59,7 +65,7 @@ const CreateItem = () => {
       </div>
 
       <form style={styles.form} onSubmit={handleSubmit}>
-        <h2 style={styles.formTitle}>Create a New Item</h2>
+        <h2 style={styles.formTitle}>Item Report</h2>
         <input
           type="text"
           name="item"
@@ -76,7 +82,7 @@ const CreateItem = () => {
           value={formData.category}
           onChange={handleChange}
           style={styles.input}
-          required
+          
         />
         <input
           type="text"
@@ -96,19 +102,11 @@ const CreateItem = () => {
           required
         />
         <input
-          type="text"
-          name="lat"
-          placeholder="Latitude"
-          value={formData.lat}
-          onChange={handleChange}
-          style={styles.input}
-        />
-        <input
-          type="text"
-          name="lng"
-          placeholder="Longitude"
-          value={formData.lng}
-          onChange={handleChange}
+          type="file"
+          name="photo"
+          accept="image/*"
+          value={formData.photo}
+          onChange={handleFileChange}
           style={styles.input}
         />
         <button type="submit" style={styles.submitButton}>
@@ -176,14 +174,16 @@ const styles = {
     fontSize: "16px",
   },
   submitButton: {
-    width: "100%",
+    width: "104%", 
     padding: "10px",
+    margin: "10px 0", 
+    borderRadius: "5px",
+    border: "None", 
     backgroundColor: "#1e4d2b",
     color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "18px",
+    fontSize: "16px", 
     cursor: "pointer",
+    boxSizing: "border-box", 
   },
 };
 
