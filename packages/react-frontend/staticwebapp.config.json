@@ -1,19 +1,17 @@
 {
     "navigationFallback": {
       "rewrite": "/index.html",
-      "exclude": ["/static/*", "/login", "/signup", "/home", "/item/*"]
+      "exclude": ["/static/*"]
     },
     "routes": [
       {
         "route": "/login",
         "methods": ["GET", "POST"],
-        "rewrite": "/index.html",
         "redirect": "/home"
       },
       {
         "route": "/signup",
         "methods": ["GET", "POST"],
-        "rewrite": "/index.html",
         "redirect": "/login"
       },
       {

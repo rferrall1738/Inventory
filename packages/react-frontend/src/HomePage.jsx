@@ -30,6 +30,7 @@ const HomePage = () => {
     };
     getItems();
   }, []);
+  
   if (loading) {
     return <div>Loading...</div>
   }

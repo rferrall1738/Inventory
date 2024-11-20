@@ -8,8 +8,7 @@ const Item = () =>
 {
     const [item, setItem] = useState([]);
 
-
-    const { id } = useParams(); // Extract the unique ID from the route
+    const {id} = useParams(); // Extract the unique ID from the route
     useEffect(() =>{
         const getItem = async () => {
           try{
