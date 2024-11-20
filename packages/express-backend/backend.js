@@ -1,5 +1,5 @@
 import express from "express";
-import cors from "cors";
+import cors from 'cors';
 import userServices from "./user-services.js"; 
 import inventoryServices from "./inventory-services.js";
 import bcrypt from 'bcrypt'
@@ -17,6 +17,10 @@ app.use(cors({
   credentials: true,
 }));
 
+app.options('*', cors());
+
+
+
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
@@ -26,7 +30,7 @@ app.post("/signup", async (req, res) => {
     console.log("Sign up email:", email);
     const existingUser = await userServices.findUserByEmail(email);
     if (existingUser) {
-      return res.status(409).json({nessage: "User already exists"});
+      return res.status(409).json({message: "User already exists"});
     }
     const createdUser = await userServices.addUser( {email, password} );
     res.status(201).json(createdUser);
