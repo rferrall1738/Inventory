@@ -46,7 +46,7 @@ const HomePage = () => {
   );
 
   const handleGridClick = (item) => {
-    window.location.href = 'item/' + item._id;
+    window.location.href = 'items/' + item._id;
 };
 
   return (

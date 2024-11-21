@@ -17,7 +17,7 @@ function App() {
                 {/* Private Routes */}
                 <Route element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}>
                     <Route path="/home" element={<HomePage />} />
-                    <Route path="/item/:id" element={<Item />} />
+                    <Route path="/items/:id" element={<Item />} />
                 </Route>
             </Routes>
         </BrowserRouter>

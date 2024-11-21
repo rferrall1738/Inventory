@@ -47,7 +47,7 @@ const Item = () =>
             />
           </div>
           <div style={styles.grid}>
-
+          {filteredItems.map((item) => (
           <div key={item._id || item.Item}>
             <div style={styles.imagePlaceholder}></div>
             <div style={styles.info}>
@@ -58,6 +58,7 @@ const Item = () =>
               <SmallMap lat={item.Lat} lng={item.Lng} />
             </div>
           </div>
+          ))}
       </div>
 
       <button>
