@@ -14,7 +14,7 @@ const Item = () =>
           try{
             const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/${id}`);
             if (!response.ok) {
-              throw new Error('Error fetching items: status ${response.status}');
+              throw new Error(`Error fetching items: status ${response.status}`);
             }
             try 
             {

@@ -58,6 +58,9 @@ async function addItem(item){
 function getItems(){
     return inventoryModel.find({});
 }
+function getItem(id){
+    return inventoryModel.findOne({id:id})
+}
 async function deleteItem(item){
     return inventoryModel.findOneAndDelete({item:item})
 }
@@ -66,6 +69,7 @@ export default {
     findItemByID,
     addItem,
     deleteItem,
-    getItems
+    getItems,
+    getItem
 
 };
