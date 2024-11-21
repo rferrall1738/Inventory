@@ -27,7 +27,7 @@ function UserSignup() {
     };
 
     console.log("Sign-Up Data:", signupData);
-    console.log('Attempting to connect to', API_URL)
+    
 
     try {
       // Post request to the backend

@@ -1,7 +1,6 @@
 import {useState, useEffect} from "react";
 import SmallMap from './Map'
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
 
 const HomePage = () => {
   const [search, setSearch] = useState("");
@@ -12,11 +11,11 @@ const HomePage = () => {
     localStorage.removeItem('token');
     window.location.href = '/login'
   };
-  console.log('Attempting to connect to', API_URL)
+
   useEffect(() =>{
     const getItems = async () => {
       try{
-        const response = await fetch(`${API_URL}/items`);
+        const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items`);
         if (!response.ok) {
           throw new Error(`Error fetching items: status ${response.status}`);
         }
