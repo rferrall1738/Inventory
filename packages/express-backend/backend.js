@@ -17,6 +17,8 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+app.use(express.json());
+
 app.post("/signup", async (req, res) => {
   try {
     const { email, password } = req.body;
