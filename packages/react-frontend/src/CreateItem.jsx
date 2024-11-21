@@ -12,7 +12,6 @@ const CreateItem = () => {
 
   const [error, setError] = useState(null); // Optional: for error handling
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -20,45 +19,35 @@ const CreateItem = () => {
       [name]: value,
     }));
   };
-
-  const getCoordinates = async (location) => {
-    const enhancedLocation = `${location}, Cal Poly, San Luis Obispo, CA`;
-    try {
-      const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
-        params: {
-          address: enhancedLocation,
-          key: "AIzaSyDBMJyGYH7GNDXSJmdzO-kg7-iMHtzJFbE", //need to take this out for testing rn
-        },
-      });
-
-      if (response.data.status === "OK") {
-        const { lat, lng } = response.data.results[0].geometry.location;
-        return { lat, lng };
-      } else {
-        throw new Error("Geocoding API error");
-      }
-    } catch (error) {
-      console.error("Error fetching coordinates:", error);
-      throw error;
-    }
+  const validateDate = (date) => {
+    const datePattern = /^\d{1,2}-\d{1,2}-\d{4}$/; // MM-DD-YYYY pattern
+    return datePattern.test(date);
   };
+
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateDate(formData.date)) {
+      setError(
+        `${formData.date} is not in the proper format. Use MM-DD-YYYY, e.g., 10-31-2024.`
+      );
+      return;
+    }
+    
     try {
-      // Get coordinates for the location
-      const coordinates = await getCoordinates(formData.location);
 
-      // Create the item data to send, including coordinates
-      const itemWithCoordinates = {
-        ...formData,
-        Lat: coordinates.lat,
-        Lng: coordinates.lng,
-      };
-
+      const response = await fetch('http://localhost:8000/create-item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
       // Send data to backend
-      const response = await axios.post("http://localhost:8000/items", itemWithCoordinates);
+      // const response = await axios.post("http://localhost:8000/create-item", formData);
 
       if (response.status === 201) {
         alert("Item created successfully!");
@@ -120,13 +109,15 @@ const CreateItem = () => {
           required
         />
         <input
-          type="date"
+          type="text"
           name="date"
+          placeholder="Date (MM-DD-YYYY)"
           value={formData.date}
           onChange={handleChange}
           style={styles.input}
           required
         />
+        {error && <p style={styles.error}>{error}</p>}
         <button type="submit" style={styles.submitButton}>
           Create Item
         </button>

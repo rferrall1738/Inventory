@@ -138,8 +138,9 @@ app.post("/create-item", async (req, res) => {
     if (!createdItem) {
       return res.status(400).json({ message: "Failed to create the item." });
     }
-
-    res.status(201).json({ message: "Item created successfully!", createdItem });
+    console.log("Item Created Successfully")
+    res.status(201).json(createdItem);
+    
   } catch (error) {
     console.error("Error creating item:", error);
     res.status(500).json({ message: "Internal Server Error" });
