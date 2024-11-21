@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
+
 
 function UserLogin() {
   const [email, setEmail] = useState('');
@@ -24,11 +24,11 @@ function UserLogin() {
     //Debug statements
     console.log("Email", loginData.email);
     console.log('Password:', loginData.password);
-    console.log('Attempting to connect to', API_URL)
+   
 
     try {
       // Post Request
-      const response = await fetch(`${API_URL}/login`, {
+      const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

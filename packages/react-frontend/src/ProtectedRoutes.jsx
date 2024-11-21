@@ -1,7 +1,6 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
 
 const ProtectedRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -15,7 +14,7 @@ const ProtectedRoutes = () => {
       }
 
       try {
-        const response = await fetch(`${API_URL}/auth-user`, {
+        const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/auth-user`, {
           method: "GET",
           headers: {
             'Authorization': `Bearer ${token}`,

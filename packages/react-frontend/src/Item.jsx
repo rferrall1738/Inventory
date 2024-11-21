@@ -2,7 +2,7 @@ import { useState ,useEffect} from "react";
 import { useParams } from "react-router-dom";
 import SmallMap from "./Map";
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
+
 
 const Item = () =>
 {
@@ -12,7 +12,7 @@ const Item = () =>
     useEffect(() =>{
         const getItem = async () => {
           try{
-            const response = await fetch(`${API_URL}/${id}`);
+            const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/${id}`);
             if (!response.ok) {
               throw new Error('Error fetching items: status ${response.status}');
             }

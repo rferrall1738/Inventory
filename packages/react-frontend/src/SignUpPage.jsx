@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API_URL = import.meta.env.VITE_APP_API_URL;
+
 
 function UserSignup() {
   
@@ -31,8 +31,8 @@ function UserSignup() {
 
     try {
       // Post request to the backend
-      console.log("Sending POST request to:", `${API_URL}/signup`);
-      const response = await fetch(`${API_URL}/signup`, {
+      console.log("Sending POST request to:", `https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/signup`);
+      const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
