@@ -48,7 +48,7 @@ const Item = () =>
           </div>
           <div style={styles.grid}>
 
-          <div key={item._id}>
+          <div key={item._id || item.Item}>
             <div style={styles.imagePlaceholder}></div>
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.Item}</h2>
