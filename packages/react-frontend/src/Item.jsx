@@ -1,73 +1,66 @@
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import SmallMap from "./Map";
 
+const Item = () => {
+    const [item, setItem] = useState(null); 
+    const [loading, setLoading] = useState(true);
+    const { id } = useParams(); 
 
-
-const Item = () =>
-{
-    const [item, setItem] = useState([]);
-
-    const {id} = useParams(); // Extract the unique ID from the route
-    useEffect(() =>{
+    useEffect(() => {
         const getItem = async () => {
-          try{
-            const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/${id}`);
-            if (!response.ok) {
-              throw new Error(`Error fetching items: status ${response.status}`);
+            try {
+                const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items/${id}`);
+                if (!response.ok) {
+                    throw new Error(`Error fetching item: status ${response.status}`);
+                }
+                const fetchedItem = await response.json();
+                setItem(fetchedItem);
+                setLoading(false); 
+            } catch (error) {
+                console.error("Error fetching item:", error);
+                setLoading(false); 
             }
-            try 
-            {
-                const item = await response.json();
-                setItem(item)
-            }
-            catch (error)
-            {
-                console.error('No item associated with that ID', error);
-            }
-          }catch (error){
-            console.error('Error fetching items',error);
-          }
         };
         getItem();
-      });
+    }, [id]);
 
-      const back = () => {
-        window.location.href = '/home';
-      }
+    const back = () => {
+        window.location.href = "/home";
+    };
 
-      return (
+    if (loading) {
+        return <div>Loading item details...</div>;
+    }
+
+    if (!item) {
+        return <div>Item not found.</div>; 
+    }
+
+    return (
         <div style={styles.container}>
-          <div style={styles.fixedHeader}>
-            <button style={styles.addButton} onClick = {() => back()}>{"\u2190"}
-            </button>
-            <h1 style={styles.title}>POLYFINDER</h1>
-            <img src="polyfinder.png" // Replace with actual user image URL
-                 style={styles.profileImage}
-            />
-          </div>
-          <div style={styles.grid}>
-          <div key={item._id || item.Item}>
-            <div style={styles.imagePlaceholder}></div>
-            <div style={styles.info}>
-              <h2 style={styles.cardTitle}>{item.Item}</h2>
-              <p style={styles.date}>Date: {item.Date}</p>
-              <p style={styles.category}>Category: {item.Category}</p>
-              <p style={styles.location}>📍 {item.Location}</p>
-              <SmallMap lat={item.Lat} lng={item.Lng} />
+            <div style={styles.fixedHeader}>
+                <button style={styles.addButton} onClick={back}>{"\u2190"}</button>
+                <h1 style={styles.title}>POLYFINDER</h1>
+                <img src="polyfinder.png" style={styles.profileImage} />
             </div>
-          </div>
-      </div>
-
-      <button>
-        Claim This Item
-      </button>
-
-
-
-    </div>
-      );
+            <div style={styles.grid}>
+                <div key={item._id || item.Item}>
+                    <div style={styles.imagePlaceholder}></div>
+                    <div style={styles.info}>
+                        <h2 style={styles.cardTitle}>{item.Item}</h2>
+                        <p style={styles.date}>Date: {item.Date}</p>
+                        <p style={styles.category}>Category: {item.Category}</p>
+                        <p style={styles.location}>📍 {item.Location}</p>
+                        <SmallMap lat={item.Lat} lng={item.Lng} />
+                    </div>
+                </div>
+            </div>
+            <button>Claim This Item</button>
+        </div>
+    );
 };
+
 
     const styles = {
       container: {
