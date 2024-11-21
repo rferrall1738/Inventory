@@ -9,7 +9,7 @@ const SmallMap = ({ lat, lng }) => {
     const center = { lat, lng };
 
     return (
-        <LoadScriptNext googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+        <LoadScriptNext googleMapsApiKey="AIzaSyDBMJyGYH7GNDXSJmdzO-kg7-iMHtzJFbE">
             <GoogleMap
                 mapContainerStyle={mapContainerStyle}
                 center={center}
