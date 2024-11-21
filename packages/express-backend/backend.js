@@ -10,10 +10,12 @@ dotenv.config();
 const app = express();
 const port = 8000;
 
-
-app.use(cors());
-
-app.use(express.json());
+const corsOptions = {
+  origin: ["http://localhost:5173", "https://ambitious-wave-0b9c2fc1e.5.azurestaticapps.net"], // Allowed origins
+  methods: ["GET", "POST", "PUT", "DELETE"], 
+  credentials: true, 
+};
+app.use(cors(corsOptions));
 
 app.post("/signup", async (req, res) => {
   try {
@@ -178,5 +180,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.PORT || port, () => {
-  console.log("REST API is listening.");
+  console.log(`REST API is listening. http://localhost:${port}`);
 });
