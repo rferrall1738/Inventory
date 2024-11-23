@@ -4,6 +4,7 @@ import UserLogin from './LoginForm';
 import Item from './Item';
 import UserSignup from './SignUpPage';
 import ProtectedRoutes from './ProtectedRoutes'
+import CreateItem from './CreateItem';
 
 function App() {
     const isAuthenticated = localStorage.getItem('token') ? true:false;
@@ -18,6 +19,7 @@ function App() {
                 <Route element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}>
                     <Route path="/home" element={<HomePage />} />
                     <Route path="/items/:id" element={<Item />} />
+                    <Route path="/create-item" element={<CreateItem/>}/>
                 </Route>
             </Routes>
         </BrowserRouter>

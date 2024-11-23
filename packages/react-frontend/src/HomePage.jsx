@@ -11,6 +11,10 @@ const HomePage = () => {
     localStorage.removeItem('token');
     window.location.href = '/login'
   };
+  
+  const handleAddItemClick = () => {
+    window.location.href = '/create-item'
+  };
 
   useEffect(() =>{
     const getItems = async () => {
@@ -52,7 +56,7 @@ const HomePage = () => {
   return (
     <div style={styles.container}>
       <div style={styles.fixedHeader}>
-        <button style={styles.addButton}>+</button>
+        <button style={styles.addButton} onClick={handleAddItemClick}>+</button>
         <h1 style={styles.title}>POLYFINDER</h1>
         <img src="polyfinder.png" // Replace with actual user image URL
              style={styles.profileImage}

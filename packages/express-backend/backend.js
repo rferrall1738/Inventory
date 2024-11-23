@@ -106,7 +106,13 @@ app.post("/items", async (req,res) => {
     const {Item, Category, Location, Date} = req.body
 
     console.log("Item Name:", Item, "Category:",Category, "Location:",Location,"Date",Date)
-    const itemData = {Item: Item, Category: Category, Location: Location, Date: Date}
+    const itemData = {
+      Item: Item, 
+      Category: 
+      Category, 
+      Location: 
+      Location, 
+      Date: Date}
     
     const createdItem = await inventoryServices.addItem(itemData);
     if (!createdItem){
@@ -118,6 +124,35 @@ app.post("/items", async (req,res) => {
     res.status(500).json({message: "Error"})
   }
 });
+
+
+app.post("/create-item", async (req, res) => {
+  try {
+    const { item, category, location, date } = req.body;
+
+    console.log("Creating item:", { item, category, location, date });
+
+    const itemData = {
+      item,
+      category,
+      location,
+      date
+    };
+
+    const createdItem = await inventoryServices.addItem(itemData);
+
+    if (!createdItem) {
+      return res.status(400).json({ message: "Failed to create the item." });
+    }
+    console.log("Item Created Successfully")
+    res.status(201).json(createdItem);
+    
+  } catch (error) {
+    console.error("Error creating item:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 app.delete("/items", async (req,res) => {
   const item =req.params["item"];

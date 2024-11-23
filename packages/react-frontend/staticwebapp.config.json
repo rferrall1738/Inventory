@@ -23,6 +23,11 @@
         "route": "/item/*",
         "methods":["GET","POST"],
         "rewrite": "/index.html"
+      },
+      {
+        "route": "/create-item",
+        "methods": ["GET","POST"],
+        "rewrite": "/index.html"
       }
     ],
     "responseOverrides": {
