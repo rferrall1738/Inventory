@@ -76,6 +76,14 @@ const InventorySchema = new mongoose.Schema(
                 message: props => `${props.date} is not in the proper format. Use 10-31-2024 for example`
             },
         },
+        Status: {
+            type: String,
+            required: true,
+            enum:{
+                values:["Lost", "Found"],
+                message: '{VALUE} is not a valid status. Valid statues are "Lost", or "Found'
+            }
+        },
         Lat: {
             type: Number,
             required: true,

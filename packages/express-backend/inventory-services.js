@@ -52,6 +52,7 @@ async function addItem(item){
         Category: item.category,
         Location: item.location,
         Date: item.date,
+        Status: item.status,
         Lat: coordinates.lat,
         Lng: coordinates.lng,
     };

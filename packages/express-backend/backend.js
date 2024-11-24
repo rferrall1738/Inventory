@@ -103,16 +103,17 @@ app.get("/items", async (req, res) => {
 
 app.post("/items", async (req,res) => {
   try{
-    const {Item, Category, Location, Date} = req.body
+    const {Item, Category, Location, Date, Status} = req.body
 
-    console.log("Item Name:", Item, "Category:",Category, "Location:",Location,"Date",Date)
+    console.log("Item Name:", Item, "Category:",Category, "Location:",Location,"Date",Date, "Status", Status)
     const itemData = {
       Item: Item, 
       Category: 
       Category, 
       Location: 
       Location, 
-      Date: Date}
+      Date: Date,
+      Status: Status}
     
     const createdItem = await inventoryServices.addItem(itemData);
     if (!createdItem){
@@ -128,15 +129,16 @@ app.post("/items", async (req,res) => {
 
 app.post("/create-item", async (req, res) => {
   try {
-    const { item, category, location, date } = req.body;
+    const { item, category, location, date, status } = req.body;
 
-    console.log("Creating item:", { item, category, location, date });
+    console.log("Creating item:", { item, category, location, date, status});
 
     const itemData = {
       item,
       category,
       location,
-      date
+      date,
+      status
     };
 
     const createdItem = await inventoryServices.addItem(itemData);

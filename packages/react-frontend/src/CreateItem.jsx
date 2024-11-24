@@ -8,9 +8,18 @@ const CreateItem = () => {
     category: "",
     location: "",
     date: "",
+    status: "",
   });
 
   const [error, setError] = useState(null); // Optional: for error handling
+
+  const handleStatusChange = (status) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      status,
+    }));
+    setError(null);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -88,8 +97,17 @@ const CreateItem = () => {
       );
       return;
     }
+
+    if (!formData.status) {
+      setError("Please select whether the item is Lost or Found.");
+      return;
+    }
+    
     
     try {
+
+      // Send data to backend
+      // const response = await fetch('http://localhost:8000/create-item', {
 
       const response = await fetch('https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/create-item', {
         method: 'POST',
@@ -99,8 +117,7 @@ const CreateItem = () => {
         body: JSON.stringify(formData),
       });
       
-      // Send data to backend
-      // const response = await axios.post("https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/create-item", formData);
+
 
       if (response.status === 201) {
         alert("Item created successfully!");
@@ -170,7 +187,31 @@ const CreateItem = () => {
           style={styles.input}
           required
         />
-       {/* Display error message here */}
+        <div style={styles.statusContainer}>
+          <button
+            type="button"
+            style={{
+              ...styles.statusButton,
+              backgroundColor: formData.status === "Lost" ? "#f8c471" : "#ccc",
+            }}
+            onClick={() => handleStatusChange("Lost")}
+          >
+            Lost
+          </button>
+          <button
+            type="button"
+            style={{
+              ...styles.statusButton,
+              backgroundColor: formData.status === "Found" ? "#f8c471" : "#ccc",
+            }}
+            
+            onClick={() => handleStatusChange("Found")}
+          >
+            Found
+          </button>
+        </div>
+
+      
       {error && ( <div style={styles.error}>
       <span role="img" aria-label="error">⚠️</span> {error} </div>)}
         <button type="submit" style={styles.submitButton}>
@@ -249,18 +290,31 @@ const styles = {
     cursor: "pointer",
     boxSizing: "border-box", 
   },
-
-    error: {
-      color: "red",
-      backgroundColor: "#ffe6e6",
-      border: "1px solid red",
-      borderRadius: "5px",
-      padding: "10px",
-      marginTop: "10px",
-      fontSize: "14px",
-      fontWeight: "bold",
-      textAlign: "left",
-    },
+  statusContainer: {
+    display: "flex",
+    justifyContent: "center",
+    margin: "10px 0",
+  },
+  statusButton: {
+    width: "100%",
+    margin: "0 5px",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "5px",
+    color: "#fff",
+    cursor: "pointer",
+  },
+  error: {
+    color: "red",
+    backgroundColor: "#ffe6e6",
+    border: "1px solid red",
+    borderRadius: "5px",
+    padding: "10px",
+    marginTop: "10px",
+    fontSize: "14px",
+    fontWeight: "bold",
+    textAlign: "left",
+  },
   };
 
 

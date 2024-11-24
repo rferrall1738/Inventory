@@ -46,7 +46,8 @@ const HomePage = () => {
       item.Item.toLowerCase().includes(search.toLowerCase()) ||
       item.Location.toLowerCase().includes(search.toLowerCase())||
       item.Category.toLowerCase().includes(search.toLowerCase())||
-      item.Date.toLowerCase().includes(search.toLowerCase())
+      item.Date.toLowerCase().includes(search.toLowerCase()) ||
+      item.Status.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleGridClick = (item) => {
@@ -70,6 +71,7 @@ const HomePage = () => {
             <div style={styles.imagePlaceholder}></div>
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.Item}</h2>
+              <p style={styles.Category}>Status: {item.Status}</p>
               <p style={styles.date}>Date: {item.Date}</p>
               <p style={styles.category}>Category: {item.Category}</p>
               <p style={styles.location}>📍 {item.Location}</p>
