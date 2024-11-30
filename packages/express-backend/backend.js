@@ -5,6 +5,7 @@ import inventoryServices from "./inventory-services.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import multer from 'multer';
 
 dotenv.config();
 const app = express();
@@ -101,42 +102,41 @@ app.get("/items", async (req, res) => {
     }
   })
 
-app.post("/items", async (req,res) => {
-  try{
-    const {Item, Category, Location, Date} = req.body
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
-    console.log("Item Name:", Item, "Category:",Category, "Location:",Location,"Date",Date)
-    const itemData = {
-      Item: Item, 
-      Category: 
-      Category, 
-      Location: 
-      Location, 
-      Date: Date}
-    
-    const createdItem = await inventoryServices.addItem(itemData);
-    if (!createdItem){
-      return res.status(404).send("Item not in database")
-    }
-    res.status(201).json(createdItem);
-  } catch (error){
-    console.log(error);
-    res.status(500).json({message: "Error"})
-  }
+app.use("/uploads", express.static("uploads"));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/"); 
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
 
+const upload = multer({ storage, limits: { fileSize: 50 * 1600 * 1600 }}); 
 
-app.post("/create-item", async (req, res) => {
+app.post("/create-item", upload.single("image"),async (req, res) => {
   try {
-    const { item, category, location, date } = req.body;
+    console.log("Request body:", req.body); 
+    console.log("Uploaded file:", req.file);
+    const { Item, Category, Location, Date, Status} = req.body;
+   
+    const imageUrl = req.file
+    ? `https://ambitious-wave-0b9c2fc1e.5.azurestaticapps.net/uploads/${req.file.filename}`
+    : null;
 
-    console.log("Creating item:", { item, category, location, date });
+    console.log("Creating item:", { Item, Category, Location, Date, Status, imageUrl});
 
     const itemData = {
-      item,
-      category,
-      location,
-      date
+      Item,
+      Category,
+      Location,
+      Date,
+      Status, 
+      image: imageUrl
     };
 
     const createdItem = await inventoryServices.addItem(itemData);
@@ -196,7 +196,6 @@ app.get("/items/:id", async (req, res) => {
     res.send(result);
  }
 });
-
 
 /* NOTE: These functions aren't being used but we might want them later
 

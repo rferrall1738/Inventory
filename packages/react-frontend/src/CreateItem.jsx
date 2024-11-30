@@ -4,13 +4,26 @@ import axios from "axios"; // Import axios to make HTTP requests
 
 const CreateItem = () => {
   const [formData, setFormData] = useState({
-    item: "",
-    category: "",
-    location: "",
-    date: "",
+    Item: "", Category: "", Location: "",
+    Date: "", Status: "", image: null,
   });
 
   const [error, setError] = useState(null); // Optional: for error handling
+
+  const handleStatusChange = (Status) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      Status,
+    }));
+    setError(null);
+  };
+
+  const handleImageChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      image: e.target.files[0], 
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,9 +32,9 @@ const CreateItem = () => {
       [name]: value,
     }));
   };
-  const validateDate = (date) => {
+  const validateDate = (Date) => {
     const datePattern = /^\d{1,2}-\d{1,2}-\d{4}$/; // MM-DD-YYYY pattern
-    return datePattern.test(date);
+    return datePattern.test(Date);
   };
   const validCategories = [
     "Backpacks", "Bikes", "Clothing", "Jewelry", "Keys/Wallet", "Other", "Technology"
@@ -70,37 +83,51 @@ const CreateItem = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateDate(formData.date)) {
+    if (!validateDate(formData.Date)) {
       setError(
-        `${formData.date} is not in the proper format. Use MM-DD-YYYY, e.g., 10-31-2024.`
+        `${formData.Date} is not in the proper format. Use MM-DD-YYYY, e.g., 10-31-2024.`
       );
       return;
     }
-    if (!validCategories.includes(formData.category)){
+    if (!validCategories.includes(formData.Category)){
       setError(
-        `${formData.category} is not a proper category. Valid Categories are Backpacks, Bikes, Clothing, Jewelry, Keys/Wallet, Other, Technology`
+        `${formData.Category} is not a proper category. Valid Categories are Backpacks, Bikes, Clothing, Jewelry, Keys/Wallet, Other, Technology`
       );
       return;
     }
-    if (!validLocations.includes(formData.location)){
+    if (!validLocations.includes(formData.Location)){
       setError(
-        `${formData.location} is not a valid location. Please refer to https://afd.calpoly.edu/facilities/campus-maps/building-floor-plans/`
+        `${formData.Location} is not a valid location. Please refer to https://afd.calpoly.edu/facilities/campus-maps/building-floor-plans/`
       );
+      return;
+    }
+
+    if (!formData.Status) {
+      setError("Please select whether the item is Lost or Found.");
       return;
     }
     
+    
     try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("Item", formData.Item);
+      formDataToSend.append("Category", formData.Category);
+      formDataToSend.append("Location", formData.Location);
+      formDataToSend.append("Date", formData.Date);
+      formDataToSend.append("Status", formData.Status);
 
-      const response = await fetch('https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/create-item', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
+      if (formData.image) {
+      formDataToSend.append("image", formData.image); // Add the image file
+      }
+
       // Send data to backend
-      // const response = await axios.post("https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/create-item", formData);
+       // const response = await fetch('http://localhost:8000/create-item', {
+
+        const response = await fetch('https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/create-item', {
+        method: 'POST',
+        body: formDataToSend
+        });
+      
 
       if (response.status === 201) {
         alert("Item created successfully!");
@@ -136,41 +163,70 @@ const CreateItem = () => {
         <h2 style={styles.formTitle}>Item Report</h2>
         <input
           type="text"
-          name="item"
+          name="Item"
           placeholder="Item Name"
-          value={formData.item}
+          value={formData.Item}
           onChange={handleChange}
           style={styles.input}
           required
         />
         <input
           type="text"
-          name="category"
+          name="Category"
           placeholder="Category"
-          value={formData.category}
+          value={formData.Category}
           onChange={handleChange}
           style={styles.input}
           
         />
         <input
           type="text"
-          name="location"
+          name="Location"
           placeholder="Location"
-          value={formData.location}
+          value={formData.Location}
           onChange={handleChange}
           style={styles.input}
           required
         />
         <input
           type="text"
-          name="date"
+          name="Date"
           placeholder="Date (MM-DD-YYYY)"
-          value={formData.date}
+          value={formData.Date}
           onChange={handleChange}
           style={styles.input}
           required
         />
-       {/* Display error message here */}
+        <div style={styles.statusContainer}>
+          <button
+            type="button"
+            style={{
+              ...styles.statusButton,
+              backgroundColor: formData.Status === "Lost" ? "#f8c471" : "#ccc",
+            }}
+            onClick={() => handleStatusChange("Lost")}
+          >
+            Lost
+          </button>
+          <button
+            type="button"
+            style={{
+              ...styles.statusButton,
+              backgroundColor: formData.Status === "Found" ? "#f8c471" : "#ccc",
+            }}
+            
+            onClick={() => handleStatusChange("Found")}
+          >
+            Found
+          </button>
+        </div>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          style={styles.input}
+        />
+      
       {error && ( <div style={styles.error}>
       <span role="img" aria-label="error">⚠️</span> {error} </div>)}
         <button type="submit" style={styles.submitButton}>
@@ -249,18 +305,31 @@ const styles = {
     cursor: "pointer",
     boxSizing: "border-box", 
   },
-
-    error: {
-      color: "red",
-      backgroundColor: "#ffe6e6",
-      border: "1px solid red",
-      borderRadius: "5px",
-      padding: "10px",
-      marginTop: "10px",
-      fontSize: "14px",
-      fontWeight: "bold",
-      textAlign: "left",
-    },
+  statusContainer: {
+    display: "flex",
+    justifyContent: "center",
+    margin: "10px 0",
+  },
+  statusButton: {
+    width: "100%",
+    margin: "0 5px",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "5px",
+    color: "#fff",
+    cursor: "pointer",
+  },
+  error: {
+    color: "red",
+    backgroundColor: "#ffe6e6",
+    border: "1px solid red",
+    borderRadius: "5px",
+    padding: "10px",
+    marginTop: "10px",
+    fontSize: "14px",
+    fontWeight: "bold",
+    textAlign: "left",
+  },
   };
 
 
