@@ -48,13 +48,14 @@ async function addItem(item){
 
     // Add coordinates to the item data
     const itemWithCoordinates = {
-        Item: item.item, // Map to match the schema
-        Category: item.category,
-        Location: item.location,
-        Date: item.date,
-        Status: item.status,
+        Item: item.Item, // Map to match the schema
+        Category: item.Category,
+        Location: item.Location,
+        Date: item.Date,
+        Status: item.Status,
         Lat: coordinates.lat,
         Lng: coordinates.lng,
+        Image: item.image,
     };
     const itemToAdd = new inventoryModel(itemWithCoordinates);
     return itemToAdd.save();
@@ -75,5 +76,4 @@ export default {
     deleteItem,
     getItems,
     getItem
-
 };

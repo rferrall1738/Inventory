@@ -19,7 +19,7 @@ const HomePage = () => {
   useEffect(() =>{
     const getItems = async () => {
       try{
-        const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items`);
+        const response = await fetch(`https://ambitious-wave-0b9c2fc1e.5.azurestaticapps.net/items`);
         if (!response.ok) {
           throw new Error(`Error fetching items: status ${response.status}`);
         }
@@ -68,7 +68,13 @@ const HomePage = () => {
       <div style={styles.grid}>
         {filteredItems.map((item) => (
           <button key={item._id || item.Item} onClick={() => handleGridClick(item)}>
-            <div style={styles.imagePlaceholder}></div>
+            <div style={styles.imagePlaceholder}>
+              {item.Image ? (
+                <img src={item.Image} alt={item.Item} style={styles.image} />
+              ) : (
+                <div style={styles.placeholderText}>No Image Available</div>
+              )}
+            </div>
             <div style={styles.info}>
               <h2 style={styles.cardTitle}>{item.Item}</h2>
               <p style={styles.Category}>Status: {item.Status}</p>
@@ -101,6 +107,12 @@ const styles = {
     padding: "20px",
     textAlign: "center",
     paddingTop: "70px", // Ensures space below the fixed header
+  },
+  image: {
+    width: "100%",         // Ensures the image spans the full width of its container
+    height: "150px",       // Set a consistent height for the images
+    objectFit: "cover",    // Ensures the image covers the area without distortion
+    borderRadius: "5px",   // Optional: Adds rounded corners to match card style
   },
   fixedHeader: {
     position: "fixed",
@@ -156,29 +168,33 @@ const styles = {
   },
   card: {
     border: "1px solid #ddd",
-    borderRadius: "0", // Remove rounded corners
-    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+    borderRadius: "8px", // Add slight rounded corners
+    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)", // Slight shadow for depth
     backgroundColor: "#ffffff",
     overflow: "hidden",
-    transition: "transform 0.2s ease",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease", // Smooth transition
     padding: "10px",
     textAlign: "left",
+    cursor: "pointer",
   },
   imagePlaceholder: {
     width: "100%",
-    height: "100px",
+    height: "150px", // Consistent height for placeholders
     backgroundColor: "#e0e0e0",
-    borderRadius: "0", // Remove rounded corners
+    borderRadius: "8px", // Matches card style
     marginBottom: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   info: {
     padding: "10px 0",
   },
   cardTitle: {
     color: "#1e4d2b",
-    fontSize: "18px",
-    fontWeight: "500",
-    marginBottom: "5px",
+    fontSize: "20px", // Larger font size for emphasis
+    fontWeight: "600", // Bold title
+    margin: "10px 0",
   },
   location: {
     fontSize: "14px",

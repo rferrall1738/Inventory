@@ -1,0 +1,36 @@
+{
+    "navigationFallback": {
+      "rewrite": "/index.html",
+      "exclude": ["/static/*"]
+    },
+    "routes": [
+      {
+        "route": "/login",
+        "methods": ["GET", "POST"],
+        "redirect": "/home"
+      },
+      {
+        "route": "/signup",
+        "methods": ["GET", "POST"],
+        "redirect": "/signup"
+      },
+      {
+        "route": "/home",
+        "methods":["GET", "POST"],
+        "rewrite": "/index.html"
+      },
+      {
+        "route": "/item/*",
+        "methods":["GET","POST"],
+        "rewrite": "/index.html"
+      }
+    ],
+    "responseOverrides": {
+      "404": {
+        "rewrite": "/index.html",
+        "statusCode": 200
+      }
+    }
+    
+    }
+  

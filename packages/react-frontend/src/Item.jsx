@@ -46,9 +46,12 @@ const Item = () => {
             </div>
             <div style={styles.grid}>
                 <div key={item._id || item.Item}>
-                    <div style={styles.imagePlaceholder}></div>
+                <h2 style={styles.cardTitle}>{item.Item}</h2>
+                  {item.Image ? (<img src={item.Image} alt={item.Item} style={styles.image} />) : 
+              (<div style={styles.imagePlaceholder}>
+                <div>No Image Available</div>
+                </div>)}
                     <div style={styles.info}>
-                        <h2 style={styles.cardTitle}>{item.Item}</h2>
                         <p style={styles.Category}>Status: {item.Status}</p>
                         <p style={styles.date}>Date: {item.Date}</p>
                         <p style={styles.category}>Category: {item.Category}</p>
@@ -65,11 +68,14 @@ const Item = () => {
 
     const styles = {
       container: {
-        maxWidth: "1000px",
-        margin: "40px auto",
-        padding: "20px",
-        textAlign: "center",
-        paddingTop: "70px", // Ensures space below the fixed header
+        maxWidth: "800px", // Slightly smaller container for a compact layout
+      margin: "40px auto",
+      padding: "20px",
+      textAlign: "center",
+      paddingTop: "100px", // Ensures space below the fixed header
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
       },
       fixedHeader: {
         position: "fixed",
@@ -118,12 +124,29 @@ const Item = () => {
       imagePlaceholder: {
         width: "100%",
         height: "300px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: "#e0e0e0",
-        borderRadius: "0", // Remove rounded corners
-        marginBottom: "10px",
+        borderRadius: "10px", // Slightly rounded corners
+        marginBottom: "20px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Add subtle shadow for depth
+      },
+      image: {
+        maxWidth: "100%", // Ensure image fits within its container
+        height: "auto", // Maintain aspect ratio
+        borderRadius: "10px", // Add a consistent border radius
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Add shadow for depth
       },
       info: {
-        padding: "10px 0",
+        textAlign: "left", // Align content to the left for better readability
+        width: "100%",
+        marginTop: "20px",
+        padding: "20px",
+        border: "1px solid #ddd", // Add subtle border
+        borderRadius: "10px", // Match card style
+        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)", // Add shadow for depth
+        backgroundColor: "#ffffff", // White background for clarity
       },
       cardTitle: {
         color: "#1e4d2b",

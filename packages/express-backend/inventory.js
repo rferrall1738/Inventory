@@ -91,7 +91,12 @@ const InventorySchema = new mongoose.Schema(
         Lng: {
             type: Number,
             required: true,
-    },
+        },
+        Image: {
+            type: String,
+            required: false,
+            trim:true,
+        },
 },
     {collection: "Inventory"}
 );
