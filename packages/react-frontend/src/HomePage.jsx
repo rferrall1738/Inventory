@@ -19,7 +19,7 @@ const HomePage = () => {
   useEffect(() =>{
     const getItems = async () => {
       try{
-        const response = await fetch(`https://ambitious-wave-0b9c2fc1e.5.azurestaticapps.net/items`);
+        const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items`);
         if (!response.ok) {
           throw new Error(`Error fetching items: status ${response.status}`);
         }
