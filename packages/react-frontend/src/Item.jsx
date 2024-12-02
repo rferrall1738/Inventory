@@ -29,6 +29,9 @@ const Item = () => {
         window.location.href = "/home";
     };
 
+  
+
+    
     if (loading) {
         return <div>Loading item details...</div>;
     }
@@ -40,9 +43,11 @@ const Item = () => {
     return (
         <div style={styles.container}>
             <div style={styles.fixedHeader}>
-                <button style={styles.addButton} onClick={back}>{"\u2190"}</button>
-                <h1 style={styles.title}>POLYFINDER</h1>
-                <img src="polyfinder.png" style={styles.profileImage} />
+            <button style={styles.addButton} onClick={back}>{"\u2190"}</button>
+            <h1 style={styles.title}>POLYFINDER</h1>
+            <img src="polyfinder.png" 
+                style={styles.profileImage} 
+            />
             </div>
             <div style={styles.grid}>
                 <div key={item._id || item.Item}>
@@ -60,7 +65,7 @@ const Item = () => {
                     </div>
                 </div>
             </div>
-            <button>Claim This Item</button>
+            <button>Claim This Item </button>
         </div>
     );
 };
@@ -135,6 +140,7 @@ const Item = () => {
       image: {
         maxWidth: "100%", // Ensure image fits within its container
         height: "auto", // Maintain aspect ratio
+        alignItems: "center",
         borderRadius: "10px", // Add a consistent border radius
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Add shadow for depth
       },
@@ -157,6 +163,7 @@ const Item = () => {
       location: {
         fontSize: "24px",
         color: "#555",
+        alignItems:"center",
       },
     };
 
