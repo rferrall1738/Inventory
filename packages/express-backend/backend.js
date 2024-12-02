@@ -6,7 +6,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import multer from 'multer';
-import { BlobServiceClient } from "@azure/storage-blob";
 
 dotenv.config();
 const app = express();
@@ -103,65 +102,41 @@ app.get("/items", async (req, res) => {
     }
   })
 
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-
-app.use("/uploads", express.static("uploads"));
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads/"); 
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
-const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING); //azure blob storage connection 
-console.log("Connecting to Azure Blob")
-
-const containerClient = blobServiceClient.getContainerClient("uploads");// uploads is the container 
-console.log("Obtained uploads container")
-
-
-// Configure Multer for memory storage
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1600 * 1600 } }); // upload limits
-
-app.post("/create-item", upload.single("image"), async (req, res) => {
-  try {
-    console.log("Request body:", req.body);
-    console.log("Uploaded file:", req.file);
-
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded." });
-    }
-
-    const { Item, Category, Location, Date, Status } = req.body;
-
-   // Creation of the blob in Azure
-    const timestamp = new Date().getTime(); 
-    const blobName = `${timestamp}-${req.file.originalname}`;
-    console.log(`Created blob : ${blobName}`)
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    
-    await blockBlobClient.uploadData(req.file.buffer, {
-      blobHTTPHeaders: { blobContentType: req.file.mimetype },
-    });
-
-    // Get the URL of the uploaded blob
-    const imageUrl = blockBlobClient.url;
-    console.log(`imageUrl:${imageUrl}`)
-
-    console.log("Creating item:", { Item, Category, Location, Date, Status, imageUrl });
-
-    const itemData = {
-      Item,
-      Category,
-      Location,
-      Date,
-      Status,
-      image: imageUrl,
-    };
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+  
+  app.use("/uploads", express.static("uploads"));
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "./uploads/"); 
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + "-" + file.originalname);
+    },
+  });
+  
+  const upload = multer({ storage, limits: { fileSize: 50 * 1600 * 1600 }}); 
+  
+  app.post("/create-item", upload.single("image"),async (req, res) => {
+    try {
+      console.log("Request body:", req.body); 
+      console.log("Uploaded file:", req.file);
+      const { Item, Category, Location, Date, Status} = req.body;
+     
+      const imageUrl = req.file
+      ? `https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/uploads/${req.file.filename}`
+      : null;
+  
+      console.log("Creating item:", { Item, Category, Location, Date, Status, imageUrl});
+  
+      const itemData = {
+        Item,
+        Category,
+        Location,
+        Date,
+        Status, 
+        image: imageUrl
+      };
 
     const createdItem = await inventoryServices.addItem(itemData);
 
