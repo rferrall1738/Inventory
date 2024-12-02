@@ -117,15 +117,15 @@ const storage = multer.diskStorage({
   },
 });
 
-const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
-const containerClient = blobServiceClient.getContainerClient("uploads");
+const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING); //azure blob storage connection 
+const containerClient = blobServiceClient.getContainerClient("uploads");// uploads is the container 
 
 await containerClient.createIfNotExists({
   access: "container", 
 });
 
 // Configure Multer for memory storage
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1600 * 1600 } }); // 5MB limit
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1600 * 1600 } }); // upload limits
 
 app.post("/create-item", upload.single("image"), async (req, res) => {
   try {
@@ -138,11 +138,11 @@ app.post("/create-item", upload.single("image"), async (req, res) => {
 
     const { Item, Category, Location, Date, Status } = req.body;
 
-    // Azure Blob Storage logic
+   
     const blobName = `${Date.now()}-${req.file.originalname}`;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-    // Upload file buffer to Azure Blob Storage
+    
     await blockBlobClient.uploadData(req.file.buffer, {
       blobHTTPHeaders: { blobContentType: req.file.mimetype },
     });
