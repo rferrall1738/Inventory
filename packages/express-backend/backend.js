@@ -118,11 +118,11 @@ const storage = multer.diskStorage({
 });
 
 const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING); //azure blob storage connection 
-const containerClient = blobServiceClient.getContainerClient("uploads");// uploads is the container 
+console.log("Connecting to Azure Blob")
 
-await containerClient.createIfNotExists({
-  access: "container", 
-});
+const containerClient = blobServiceClient.getContainerClient("uploads");// uploads is the container 
+console.log("Obtained uploads container")
+
 
 // Configure Multer for memory storage
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1600 * 1600 } }); // upload limits
@@ -138,11 +138,11 @@ app.post("/create-item", upload.single("image"), async (req, res) => {
 
     const { Item, Category, Location, Date, Status } = req.body;
 
-   
-    const timestamp = new Date().getTime(); // Fallback to new Date().getTime() if Date.now is not a function
+   // Creation of the blob in Azure
+    const timestamp = new Date().getTime(); 
     const blobName = `${timestamp}-${req.file.originalname}`;
+    console.log(`Created blob : ${blobName}`)
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
     
     await blockBlobClient.uploadData(req.file.buffer, {
       blobHTTPHeaders: { blobContentType: req.file.mimetype },
@@ -150,6 +150,7 @@ app.post("/create-item", upload.single("image"), async (req, res) => {
 
     // Get the URL of the uploaded blob
     const imageUrl = blockBlobClient.url;
+    console.log(`imageUrl:${imageUrl}`)
 
     console.log("Creating item:", { Item, Category, Location, Date, Status, imageUrl });
 
