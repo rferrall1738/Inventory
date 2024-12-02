@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import multer from 'multer';
+import { BlobServiceClient } from "@azure/storage-blob";
 
 dotenv.config();
 const app = express();
@@ -116,27 +117,48 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage, limits: { fileSize: 50 * 1600 * 1600 }}); 
+const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
+const containerClient = blobServiceClient.getContainerClient("uploads");
 
-app.post("/create-item", upload.single("image"),async (req, res) => {
+await containerClient.createIfNotExists({
+  access: "container", 
+});
+
+// Configure Multer for memory storage
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1600 * 1600 } }); // 5MB limit
+
+app.post("/create-item", upload.single("image"), async (req, res) => {
   try {
-    console.log("Request body:", req.body); 
+    console.log("Request body:", req.body);
     console.log("Uploaded file:", req.file);
-    const { Item, Category, Location, Date, Status} = req.body;
-   
-    const imageUrl = req.file
-    ? `https://ambitious-wave-0b9c2fc1e.5.azurestaticapps.net/uploads/${req.file.filename}`
-    : null;
 
-    console.log("Creating item:", { Item, Category, Location, Date, Status, imageUrl});
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded." });
+    }
+
+    const { Item, Category, Location, Date, Status } = req.body;
+
+    // Azure Blob Storage logic
+    const blobName = `${Date.now()}-${req.file.originalname}`;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+    // Upload file buffer to Azure Blob Storage
+    await blockBlobClient.uploadData(req.file.buffer, {
+      blobHTTPHeaders: { blobContentType: req.file.mimetype },
+    });
+
+    // Get the URL of the uploaded blob
+    const imageUrl = blockBlobClient.url;
+
+    console.log("Creating item:", { Item, Category, Location, Date, Status, imageUrl });
 
     const itemData = {
       Item,
       Category,
       Location,
       Date,
-      Status, 
-      image: imageUrl
+      Status,
+      image: imageUrl,
     };
 
     const createdItem = await inventoryServices.addItem(itemData);
@@ -144,9 +166,9 @@ app.post("/create-item", upload.single("image"),async (req, res) => {
     if (!createdItem) {
       return res.status(400).json({ message: "Failed to create the item." });
     }
-    console.log("Item Created Successfully")
+
+    console.log("Item Created Successfully");
     res.status(201).json(createdItem);
-    
   } catch (error) {
     console.error("Error creating item:", error);
     res.status(500).json({ message: "Internal Server Error" });
