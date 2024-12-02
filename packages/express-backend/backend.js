@@ -139,7 +139,8 @@ app.post("/create-item", upload.single("image"), async (req, res) => {
     const { Item, Category, Location, Date, Status } = req.body;
 
    
-    const blobName = `${Date.now()}-${req.file.originalname}`;
+    const timestamp = new Date().getTime(); // Fallback to new Date().getTime() if Date.now is not a function
+    const blobName = `${timestamp}-${req.file.originalname}`;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
     
