@@ -5,12 +5,12 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 mongoose.set('debug', true)
-
+if(process.env.NODE_ENV !== 'test'){
 mongoose
  .connect(process.env.MONGODB_URI)
  .then(() => console.log('Connected to MongoDB Atlas'))
  .catch((error) => console.log('Connection error', error))
-
+}
 async function addUser(user) {
  console.log('OG password', user.password)
  const saltRounds = 10
