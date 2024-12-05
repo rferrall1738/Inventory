@@ -23,6 +23,34 @@ app.use(cors(corsOptions))
 
 app.use(express.json())
 
+app.post('/login', async (req, res) => {
+ try {
+  const { email, password } = req.body
+  console.log(req.body)
+  // Debug statements
+  console.log('Received email: ', email)
+  console.log('Received Password: ', password)
+
+  const user = await userServices.findUserByEmail(email)
+  if (!user) {
+   return res.status(404).json({ message: 'User not Found' })
+  }
+  const isFound = await bcrypt.compare(password, user.password)
+  if (!isFound) {
+   return res.status(401).json({ message: 'Invalid Credentials' })
+  }
+  const token = jwt.sign({ email }, process.env.SECRET_KEY, {
+   expiresIn: '15m',
+  })
+  res
+   .status(200)
+   .json({ message: 'Login Successful. Redirecting...', user, token })
+ } catch (error) {
+  console.log(error)
+  res.status(500).json({ message: 'Error' })
+ }
+})
+
 app.post('/signup', async (req, res) => {
  try {
   const { email, password } = req.body
