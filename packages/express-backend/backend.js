@@ -55,15 +55,9 @@ app.get("/auth-user", (req, res) => {
   });
 });
 
-
 app.post("/login", async (req, res) => {
   try{
-    const {email, password} = req.body;
-    console.log(req.body)
-  // Debug statements
-    console.log("Received email: ", email)
-    console.log("Received Password: ", password)
-  
+    const {email, password} = req.body;  
     const user = await userServices.findUserByEmail(email);
     if (!user){
       return res.status(404).json({message: "User not in the database"});
