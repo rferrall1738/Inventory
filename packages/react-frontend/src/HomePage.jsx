@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import SmallMap from './Map'
+import SearchBar from './searchbar'
 
 const HomePage = () => {
  const [search, setSearch] = useState('')
@@ -38,10 +39,9 @@ const HomePage = () => {
  if (loading) {
   return <div>Loading...</div>
  }
- const handleSearchChange = (event) => {
-  setSearch(event.target.value)
+ const handleSearch = (value) => {
+  setSearch(value)
  }
-
  const filteredItems = items.filter(
   (item) =>
    item.Item.toLowerCase().includes(search.toLowerCase()) ||
@@ -78,13 +78,7 @@ const HomePage = () => {
    </div>
 
    <div style={styles.searchBarContainer}>
-    <input
-     type="text"
-     value={search}
-     onChange={handleSearchChange}
-     placeholder="Search by category/location"
-     style={styles.searchBar}
-    />
+    <SearchBar onSearch={handleSearch} />
    </div>
 
    <div style={styles.grid}>
@@ -224,15 +218,7 @@ const styles = {
   color: '#555',
  },
  searchBarContainer: {
-  marginTop: '10px',
- },
- searchBar: {
-  width: '100%',
-  padding: '12px',
-  fontSize: '16px',
-  border: '1px solid #ddd',
-  borderRadius: '0', // Remove rounded corners
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+  marginTop: '20px',
  },
 }
 

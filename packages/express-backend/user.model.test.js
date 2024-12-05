@@ -49,7 +49,7 @@ describe('User Model', () => {
    await user.save()
   } catch (error) {
    expect(error).toBeInstanceOf(mongoose.Error.ValidationError)
-   expect(error.errors.email.message).toBe('Invalid email address must be a calpoly email')
+   expect(error.errors.email.message).toBe('Invalid Cal Poly Email Address')
   }
  })
 

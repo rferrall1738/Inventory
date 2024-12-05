@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import SmallMap from "./Map";
 
+
 const Item = () => {
     const [item, setItem] = useState(null); 
     const [loading, setLoading] = useState(true);
@@ -29,9 +30,6 @@ const Item = () => {
         window.location.href = "/home";
     };
 
-  
-
-    
     if (loading) {
         return <div>Loading item details...</div>;
     }
@@ -41,131 +39,120 @@ const Item = () => {
     }
 
     return (
-        <div style={styles.container}>
-            <div style={styles.fixedHeader}>
-            <button style={styles.addButton} onClick={back}>{"\u2190"}</button>
-            <h1 style={styles.title}>POLYFINDER</h1>
-            <img src="polyfinder.png" 
-                style={styles.profileImage} 
-            />
-            </div>
-            <div style={styles.grid}>
-                <div key={item._id || item.Item}>
-                <h2 style={styles.cardTitle}>{item.Item}</h2>
-                  {item.Image ? (<img src={item.Image} alt={item.Item} style={styles.image} />) : 
-              (<div style={styles.imagePlaceholder}>
-                <div>No Image Available</div>
-                </div>)}
-                    <div style={styles.info}>
-                        <p style={styles.Category}>Status: {item.Status}</p>
-                        <p style={styles.date}>Date: {item.Date}</p>
-                        <p style={styles.category}>Category: {item.Category}</p>
-                        <p style={styles.location}>📍 {item.Location}</p>
-                        <SmallMap lat={item.Lat} lng={item.Lng} />
-                    </div>
-                </div>
-            </div>
-            <button>Claim This Item </button>
-        </div>
-    );
+      <div style={styles.container}>
+          <div style={styles.fixedHeader}>
+              <button style={styles.backButton} onClick={back}>{"\u2190"}</button>
+              <h1 style={styles.title}>POLYFINDER</h1>
+              <img src="polyfinder.png" style={styles.profileImage}/>
+          </div>
+          <div style={styles.content}>
+              <h2 style={styles.itemTitle}>{item.Item}</h2>
+              {item.Image ? (
+                  <img src={item.Image} alt={item.Item} style={styles.image} />
+              ) : (
+                  <div style={styles.imagePlaceholder}>No Image Available</div>
+              )}
+              <div style={styles.info}>
+                  <p><strong>Status:</strong> {item.Status}</p>
+                  <p><strong>Date:</strong> {item.Date}</p>
+                  <p><strong>Category:</strong> {item.Category}</p>
+                  <p><strong>Location:</strong> 📍 {item.Location}</p>
+                  <SmallMap lat={item.Lat} lng={item.Lng} />
+              </div>
+              <button style={styles.claimButton}>Claim This Item</button>
+          </div>
+      </div>
+  );
 };
 
-
-    const styles = {
-      container: {
-        maxWidth: "800px", // Slightly smaller container for a compact layout
-      margin: "40px auto",
+const styles = {
+  container: {
+      maxWidth: "800px",
+      margin: "0 auto",
+      padding: "20px",
+  },
+  fixedHeader: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      backgroundColor: "#1e4d2b",
+      padding: "10px 20px",
+      height: '60px',
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      zIndex: 1000,
+  },
+  backButton: {
+      fontSize: "36px",
+      color: "#fff",
+      backgroundColor: "transparent",
+      border: "none",
+      cursor: "pointer",
+  },
+  title: {
+      color: "#fff",
+      fontSize: "32px",
+      margin: "0",
+  },
+  profileImage: {
+      width: "60px",
+      height: "60px",
+      borderRadius: "50%",
+  },
+  content: {
+      marginTop: "80px",
       padding: "20px",
       textAlign: "center",
-      paddingTop: "100px", // Ensures space below the fixed header
+  },
+  itemTitle: {
+      fontSize: "28px",
+      margin: "20px 0",
+  },
+  image: {
+      maxWidth: "100%",
+      height: "auto",
+      borderRadius: "8px",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+      marginBottom: "20px",
+  },
+  imagePlaceholder: {
+      width: "100%",
+      height: "300px",
       display: "flex",
-      flexDirection: "column",
       alignItems: "center",
-      },
-      fixedHeader: {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: "#1e4d2b", // Cal Poly Green
-        padding: "10px 20px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
-        zIndex: 1000, // Ensures the header stays on top of other content
-      },
-      title: {
-        color: "#fff", // White text color
-        fontSize: "32px",
-        fontWeight: "600",
-        textAlign: "center",
-        flex: 1, // Center title by allowing it to expand
-        marginLeft: "-20px", // Adjust for visual centering
-      },
-      profileImage: {
-        width: "60px", // Larger profile image
-        height: "60px",
-        borderRadius: "50%",
-      },
-      addButton: {
-        fontSize: "50px", // Adjust size of arrow sign
-        color: "#fff", // White color for the plus sign
-        backgroundColor: "transparent", // No background color
-        border: "none", // Remove any borders
-        cursor: "pointer",
-        padding: "0", // No padding around the plus sign
-      },
-      card: {
-        border: "10px solid black",
-        borderRadius: "0", // Remove rounded corners
-        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
-        // backgroundColor: "#ffffff",
-        // overflow: "hidden",
-        transition: "transform 0.2s ease",
-        padding: "100px",
-        textAlign: "left",
-      },
-      imagePlaceholder: {
-        width: "100%",
-        height: "300px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#e0e0e0",
-        borderRadius: "10px", // Slightly rounded corners
-        marginBottom: "20px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Add subtle shadow for depth
-      },
-      image: {
-        maxWidth: "100%", // Ensure image fits within its container
-        height: "auto", // Maintain aspect ratio
-        alignItems: "center",
-        borderRadius: "10px", // Add a consistent border radius
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", // Add shadow for depth
-      },
-      info: {
-        textAlign: "left", // Align content to the left for better readability
-        width: "100%",
-        marginTop: "20px",
-        padding: "20px",
-        border: "1px solid #ddd", // Add subtle border
-        borderRadius: "10px", // Match card style
-        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)", // Add shadow for depth
-        backgroundColor: "#ffffff", // White background for clarity
-      },
-      cardTitle: {
-        color: "#1e4d2b",
-        fontSize: "36px",
-        fontWeight: "500",
-        marginRight: "5px",
-      },
-      location: {
-        fontSize: "24px",
-        color: "#555",
-        alignItems:"center",
-      },
-    };
-
+      justifyContent: "center",
+      backgroundColor: "#e0e0e0",
+      borderRadius: "8px",
+      marginBottom: "20px",
+  },
+  info: {
+      textAlign: "left",
+      backgroundColor: "#f9f9f9",
+      padding: "20px",
+      borderRadius: "8px",
+      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+      marginBottom: "20px",
+  },
+  claimButton: {
+      backgroundColor: "#1e4d2b",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      padding: "10px 20px",
+      fontSize: "16px",
+      cursor: "pointer",
+  },
+  loading: {
+      textAlign: "center",
+      margin: "20px 0",
+  },
+  notFound: {
+      textAlign: "center",
+      color: "red",
+      margin: "20px 0",
+  },
+};
 
 export default Item;
