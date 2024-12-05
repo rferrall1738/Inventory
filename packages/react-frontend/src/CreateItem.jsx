@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import axios from "axios"; // Import axios to make HTTP requests
-
+import { useState } from "react";
 
 const CreateItem = () => {
   const [formData, setFormData] = useState({

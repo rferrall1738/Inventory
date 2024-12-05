@@ -194,7 +194,6 @@ function UserLogin() {
           style={{ ...styles.button, backgroundColor: '#f8c471', marginTop: '10px' }}>
             Signup
           </button>
-          
       </form>
       )}
     </div>
