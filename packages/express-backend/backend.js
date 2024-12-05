@@ -218,7 +218,6 @@ function authorizeUser(req, res, next) {
 }
 
 app.get('/items/:id', async (req, res) => {
- // console.log(req.body)
  const id = req.params['id']
  console.log('Id is ', id)
  const result = await inventoryServices.findItemByID(id)
@@ -230,22 +229,8 @@ app.get('/items/:id', async (req, res) => {
  }
 })
 
-/* NOTE: These functions aren't being used but we might want them later
-
-app.delete("/users/:id", async (req, res) => {
-  const id = req.params["id"];
-  const userToDelete =  await userServices.findUserById(id);
-  if (userToDelete === undefined || userToDelete === null){
-    res.status(404).send("User not found.");
-  } else {
-    const deletedUser = await userServices.deleteUser(id)
-    if (deletedUser) res.status(204).send("User deleted.")
-  }
-});
-*/
-
 app.get('/', (req, res) => {
- res.send('Add /login to this URL for a list of usernames and passwords!')
+ res.send('Running')
 })
 
 app.listen(process.env.PORT || port, () => {

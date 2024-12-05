@@ -77,6 +77,16 @@ const HomePage = () => {
     </button>
    </div>
 
+   <div style={styles.searchBarContainer}>
+    <input
+     type="text"
+     value={search}
+     onChange={handleSearchChange}
+     placeholder="Search by category/location"
+     style={styles.searchBar}
+    />
+   </div>
+
    <div style={styles.grid}>
     {filteredItems.map((item) => (
      <button
@@ -108,16 +118,6 @@ const HomePage = () => {
      </button>
     ))}
    </div>
-
-   <div style={styles.searchBarContainer}>
-    <input
-     type="text"
-     value={search}
-     onChange={handleSearchChange}
-     placeholder="Search by category/location"
-     style={styles.searchBar}
-    />
-   </div>
   </div>
  )
 }
@@ -138,6 +138,7 @@ const styles = {
  },
  fixedHeader: {
   position: 'fixed',
+  height: '60px',
   top: 0,
   left: 0,
   right: 0,
@@ -223,7 +224,7 @@ const styles = {
   color: '#555',
  },
  searchBarContainer: {
-  marginTop: '30px',
+  marginTop: '10px',
  },
  searchBar: {
   width: '100%',
