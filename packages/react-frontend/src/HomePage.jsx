@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import SmallMap from './Map'
-import SearchBar from './searchbar'
+import SearchBar from './SearchBar'
 
 const HomePage = () => {
  const [search, setSearch] = useState('')
@@ -78,7 +78,7 @@ const HomePage = () => {
    </div>
 
    <div style={styles.searchBarContainer}>
-    <SearchBar onSearch={handleSearch} /> //updated searchbar
+    <SearchBar onSearch={handleSearch} /> 
    </div>
 
    <div style={styles.grid}>

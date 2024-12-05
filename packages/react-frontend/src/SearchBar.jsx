@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch }) => {
    setIsFading(true)
    setTimeout(() => {
     setPlaceholderIndex((prevIndex) => (prevIndex + 1) % placeholders.length)
-    setIsFading(false)
+    setIsFading(false) //smoother transition
    }, 500)
   }, 3000) // Change text every 3 seconds
 
