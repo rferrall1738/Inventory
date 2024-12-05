@@ -39,7 +39,7 @@ const HomePage = () => {
  if (loading) {
   return <div>Loading...</div>
  }
- const handleSearch = (value) => {
+ const handleSearch = (value) => { 
   setSearch(value)
  }
  const filteredItems = items.filter(
@@ -78,7 +78,7 @@ const HomePage = () => {
    </div>
 
    <div style={styles.searchBarContainer}>
-    <SearchBar onSearch={handleSearch} />
+    <SearchBar onSearch={handleSearch} /> //updated searchbar
    </div>
 
    <div style={styles.grid}>

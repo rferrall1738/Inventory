@@ -21,7 +21,7 @@ const SearchBar = ({ onSearch }) => {
    }, 500)
   }, 3000) // Change text every 3 seconds
 
-  return () => clearInterval(interval) // Cleanup on unmount
+  return () => clearInterval(interval)
  }, [])
 
  const handleSearchChange = (event) => {
