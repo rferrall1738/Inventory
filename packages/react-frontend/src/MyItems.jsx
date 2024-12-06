@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import SmallMap from './Map'
 import SearchBar from './SearchBar'
 
-const HomePage = () => {
+const MyItems = () => {
  const [search, setSearch] = useState('')
  const [items, setItems] = useState([])
  const [loading, setLoading] = useState(true)
@@ -17,15 +17,17 @@ const HomePage = () => {
  }
 
  useEffect(() => {
+    const id = localStorage.getItem("emailID")
   const getItems = async () => {
    try {
-    const response = await fetch(
-     `https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items`
+    const items = await fetch(
+        // `http://localhost:8000/items/ownedby/${id}`,
+     `https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items/ownedby/${id}`
     )
-    if (!response.ok) {
+    if (!items.ok) {
      throw new Error(`Error fetching items: status ${response.status}`)
     }
-    const data = await response.json()
+    const data = await items.json()
     setItems(data)
     setLoading(false)
    } catch (error) {
@@ -260,4 +262,4 @@ const styles = {
  },
 }
 
-export default HomePage
+export default MyItems

@@ -30,6 +30,37 @@ const Item = () => {
         window.location.href = "/home";
     };
 
+    const claimItem = async () => {
+      const emailID = localStorage.getItem("emailID");
+      const itemID = {
+        Item: item._id
+      }
+      console.log("user ID:", emailID);
+      console.log("Item id:", itemID);
+      try {
+        // const response = await fetch(`http://localhost:8000/login/${emailID}`,
+        const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/login/${emailID}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(itemID),
+        });
+
+        if (!response.ok) {
+          throw new Error('Unable to claim item');
+        }
+        else{
+          alert("Item claimed!");
+          window.location.href = "/home";
+        }
+      }
+      catch (error) {
+        console.error("Error", error);
+      }
+    }
+
     if (loading) {
         return <div>Loading item details...</div>;
     }
@@ -59,7 +90,7 @@ const Item = () => {
                   <p><strong>Location:</strong> 📍 {item.Location}</p>
                   <SmallMap lat={item.Lat} lng={item.Lng} />
               </div>
-              <button style={styles.claimButton}>Claim This Item</button>
+              <button style={styles.claimButton} onClick={claimItem}>Claim This Item</button>
           </div>
       </div>
   );
