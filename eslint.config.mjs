@@ -16,4 +16,12 @@ settings: {
   },
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
+  {
+    rules: {
+      "no-undef": "off",
+      "no-unused-vars": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+    },
+  },
 ];

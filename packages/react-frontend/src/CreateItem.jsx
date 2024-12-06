@@ -1,16 +1,39 @@
-import React, { useState } from "react";
-import axios from "axios"; // Import axios to make HTTP requests
-
+import { useState } from "react";
 
 const CreateItem = () => {
+  // State to manage the selected option for each dropdown
+  const [selectedOptions, setSelectedOptions] = useState({
+    Location: null,
+    Category: null,
+  });
+
+  // State to manage whether each dropdown is open
+  const [isOpen, setIsOpen] = useState({
+    Location: false,
+    Category: false,
+  });
+
   const [formData, setFormData] = useState({
-    item: "",
-    category: "",
-    location: "",
-    date: "",
+    Item: "", Category: "", Location: "",
+    Date: "", Status: "", image: null,
   });
 
   const [error, setError] = useState(null); // Optional: for error handling
+
+  const handleStatusChange = (Status) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      Status,
+    }));
+    setError(null);
+  };
+
+  const handleImageChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      image: e.target.files[0], 
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,9 +42,9 @@ const CreateItem = () => {
       [name]: value,
     }));
   };
-  const validateDate = (date) => {
+  const validateDate = (Date) => {
     const datePattern = /^\d{1,2}-\d{1,2}-\d{4}$/; // MM-DD-YYYY pattern
-    return datePattern.test(date);
+    return datePattern.test(Date);
   };
   const validCategories = [
     "Backpacks", "Bikes", "Clothing", "Jewelry", "Keys/Wallet", "Other", "Technology"
@@ -63,44 +86,81 @@ const CreateItem = () => {
                 "Engineering IV", "Bonderson Engineering Project Center", "Center for Coastal Marine Sciences",
                 "Village Drive Parking Structure", "Canyon Circle Parking Structure", "Housing Depot"];
 
+  const options = {
+    Location: validLocations,
+    Category: validCategories
+  };
 
+  const toggleDropdown = (id) => {
+    // Close all dropdowns except the one being clicked
+    setIsOpen((prev) => {
+      const newIsOpen = {};
+      Object.keys(prev).forEach((key) => {
+        newIsOpen[key] = key === id ? !prev[key] : false;
+      });
+      return newIsOpen;
+    });
+  };
 
-    
+  const selectOption = (id, option) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [id]: option,
+    }));
+    setIsOpen((prev) => ({
+      ...prev,
+      [id]: false,
+    }));
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateDate(formData.date)) {
+    if (!validateDate(formData.Date)) {
       setError(
-        `${formData.date} is not in the proper format. Use MM-DD-YYYY, e.g., 10-31-2024.`
+        `${formData.Date} is not in the proper format. Use MM-DD-YYYY, e.g., 10-31-2024.`
       );
       return;
     }
-    if (!validCategories.includes(formData.category)){
+    if (!selectedOptions.Category){
       setError(
-        `${formData.category} is not a proper category. Valid Categories are Backpacks, Bikes, Clothing, Jewelry, Keys/Wallet, Other, Technology`
+        `Please select a category`
       );
       return;
     }
-    if (!validLocations.includes(formData.location)){
+    if (!selectedOptions.Category){
       setError(
-        `${formData.location} is not a valid location. Please refer to https://afd.calpoly.edu/facilities/campus-maps/building-floor-plans/`
+        `Please select a location`
       );
+      return;
+    }
+
+    if (!formData.Status) {
+      setError("Please select whether the item is Lost or Found.");
       return;
     }
     
     try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("Item", formData.Item);
+      formDataToSend.append("Category", selectedOptions.Category);
+      formDataToSend.append("Location", selectedOptions.Location);
+      formDataToSend.append("Date", formData.Date);
+      formDataToSend.append("Status", formData.Status);
 
-      const response = await fetch('https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/create-item', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
+      if (formData.image) {
+      formDataToSend.append("image", formData.image); // Add the image file
+      }
+
       // Send data to backend
-      // const response = await axios.post("https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/create-item", formData);
+       // const response = await fetch('http://localhost:8000/create-item', {
+
+        const response = await fetch('https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/create-item', {
+        method: 'POST',
+        body: formDataToSend
+        });
+      
 
       if (response.status === 201) {
         alert("Item created successfully!");
@@ -117,6 +177,136 @@ const CreateItem = () => {
   const back = () => {
     window.location.href = "/home";
   };
+
+  const styles = {
+    container: {
+      maxWidth: "600px",
+      margin: "40px auto",
+      padding: "20px",
+      textAlign: "center",
+      paddingTop: "70px",
+    },
+    fixedHeader: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      backgroundColor: "#1e4d2b",
+      padding: "10px 20px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+      zIndex: 1000,
+    },
+    title: {
+      color: "#fff",
+      fontSize: "32px",
+      fontWeight: "600",
+      textAlign: "center",
+      flex: 1,
+    },
+    profileImage: {
+      width: "60px",
+      height: "60px",
+      borderRadius: "50%",
+    },
+    addButton: {
+      fontSize: "50px",
+      color: "#fff",
+      backgroundColor: "transparent",
+      border: "none",
+      cursor: "pointer",
+      padding: "0",
+    },
+    form: {
+      marginTop: "20px",
+    },
+    formTitle: {
+      fontSize: "24px",
+      marginBottom: "20px",
+    },
+    input: {
+      width: "100%",
+      padding: "10px",
+      margin: "10px 0",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
+      fontSize: "16px",
+    },
+    submitButton: {
+      width: "104%", 
+      padding: "10px",
+      margin: "10px 0", 
+      borderRadius: "5px",
+      border: "None", 
+      backgroundColor: "#1e4d2b",
+      color: "#fff",
+      fontSize: "16px", 
+      cursor: "pointer",
+      boxSizing: "border-box", 
+    },
+    statusContainer: {
+      display: "flex",
+      justifyContent: "center",
+      margin: "10px 0",
+    },
+    statusButton: {
+      width: "100%",
+      margin: "0 5px",
+      padding: "10px 20px",
+      border: "none",
+      borderRadius: "5px",
+      color: "#fff",
+      cursor: "pointer",
+    },
+    error: {
+      color: "red",
+      backgroundColor: "#ffe6e6",
+      border: "1px solid red",
+      borderRadius: "5px",
+      padding: "10px",
+      marginTop: "10px",
+      fontSize: "14px",
+      fontWeight: "bold",
+      textAlign: "left",
+    },
+    dropdownContainer: {
+      position: "relative",
+      display: "inline-block",
+      padding: "10px 0px"
+    },
+    dropdownButton: {
+      width: "620px",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "10px 20px",
+      fontSize: "16px",
+      cursor: "pointer",
+    },
+    dropdownMenu: {
+      display: isOpen ? "block" : "none",
+      fontSize: "18px",
+      position: "absolute",
+      backgroundColor: "white",
+      border: "1px solid #ccc",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      borderRadius: "4px",
+      marginTop: "5px",
+      zIndex: 10,
+      width: "100%",
+    },
+    dropdownOption: {
+      padding: "10px",
+      cursor: "pointer",
+    },
+    arrow: {
+      marginRight: "-10px",
+      transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+      transition: "transform 0.2s",
+    },
+    };
 
   return (
     <div style={styles.container}>
@@ -136,41 +326,84 @@ const CreateItem = () => {
         <h2 style={styles.formTitle}>Item Report</h2>
         <input
           type="text"
-          name="item"
+          name="Item"
           placeholder="Item Name"
-          value={formData.item}
+          value={formData.Item}
           onChange={handleChange}
           style={styles.input}
           required
         />
+
+      <div>
+        {Object.keys(options).map((key) => (
+          <div key={key} style={styles.dropdownContainer}>
+            <button onClick={(e) => {
+              e.preventDefault(); // Ensures no default form behavior occurs
+              toggleDropdown(key);
+            }}style={styles.dropdownButton}>
+              {selectedOptions[key] ? selectedOptions[key] : `${key}`}
+              <span style={styles.arrow}>
+                {isOpen[key] ? '▼' : '▲'}</span> {/* Arrow added here */}
+            </button>
+
+            {isOpen[key] && (
+              <div style={styles.dropdownMenu}>
+                {options[key].map((option, index) => (
+                  <div
+                    key={index}
+                    onClick={() => selectOption(key, option)}
+                    style={styles.dropdownOption}
+                    value={formData.Category}
+                  >
+                    {option}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+        
         <input
           type="text"
-          name="category"
-          placeholder="Category"
-          value={formData.category}
-          onChange={handleChange}
-          style={styles.input}
-          
-        />
-        <input
-          type="text"
-          name="location"
-          placeholder="Location"
-          value={formData.location}
-          onChange={handleChange}
-          style={styles.input}
-          required
-        />
-        <input
-          type="text"
-          name="date"
+          name="Date"
           placeholder="Date (MM-DD-YYYY)"
-          value={formData.date}
+          value={formData.Date}
           onChange={handleChange}
           style={styles.input}
           required
         />
-       {/* Display error message here */}
+
+        <div style={styles.statusContainer}>
+          <button
+            type="button"
+            style={{
+              ...styles.statusButton,
+              backgroundColor: formData.Status === "Lost" ? "#f8c471" : "#ccc",
+            }}
+            onClick={() => handleStatusChange("Lost")}
+          >
+            Lost
+          </button>
+          <button
+            type="button"
+            style={{
+              ...styles.statusButton,
+              backgroundColor: formData.Status === "Found" ? "#f8c471" : "#ccc",
+            }}
+            
+            onClick={() => handleStatusChange("Found")}
+          >
+            Found
+          </button>
+        </div>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          style={styles.input}
+        />
+      
       {error && ( <div style={styles.error}>
       <span role="img" aria-label="error">⚠️</span> {error} </div>)}
         <button type="submit" style={styles.submitButton}>
@@ -181,87 +414,7 @@ const CreateItem = () => {
   );
 };
 
-const styles = {
-  container: {
-    maxWidth: "600px",
-    margin: "40px auto",
-    padding: "20px",
-    textAlign: "center",
-    paddingTop: "70px",
-  },
-  fixedHeader: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "#1e4d2b",
-    padding: "10px 20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
-    zIndex: 1000,
-  },
-  title: {
-    color: "#fff",
-    fontSize: "32px",
-    fontWeight: "600",
-    textAlign: "center",
-    flex: 1,
-  },
-  profileImage: {
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-  },
-  addButton: {
-    fontSize: "50px",
-    color: "#fff",
-    backgroundColor: "transparent",
-    border: "none",
-    cursor: "pointer",
-    padding: "0",
-  },
-  form: {
-    marginTop: "20px",
-  },
-  formTitle: {
-    fontSize: "24px",
-    marginBottom: "20px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    margin: "10px 0",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-  },
-  submitButton: {
-    width: "104%", 
-    padding: "10px",
-    margin: "10px 0", 
-    borderRadius: "5px",
-    border: "None", 
-    backgroundColor: "#1e4d2b",
-    color: "#fff",
-    fontSize: "16px", 
-    cursor: "pointer",
-    boxSizing: "border-box", 
-  },
 
-    error: {
-      color: "red",
-      backgroundColor: "#ffe6e6",
-      border: "1px solid red",
-      borderRadius: "5px",
-      padding: "10px",
-      marginTop: "10px",
-      fontSize: "14px",
-      fontWeight: "bold",
-      textAlign: "left",
-    },
-  };
 
 
 export default CreateItem;
