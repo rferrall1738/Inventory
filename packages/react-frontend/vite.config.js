@@ -11,4 +11,9 @@ export default defineConfig({
   
     'import.meta.env.VITE_GOOGLE_MAPS_API_KEY': JSON.stringify(process.env.VITE_GOOGLE_MAPS_API_KEY),
   },
+  build: {
+    rollupOptions: {
+      external: ["@emailjs/browser"],
+    }
+  },
 });
