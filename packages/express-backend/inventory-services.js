@@ -39,10 +39,6 @@ async function getCoordinates(location) {
  }
 }
 
-async function findItem(item) {
- return inventoryModel.findOne(item)
-}
-
 function findItemByID(item) {
  return inventoryModel.findById(item)
 }
@@ -67,17 +63,29 @@ async function addItem(item) {
 function getItems() {
  return inventoryModel.find({})
 }
-async function getItem(id) {
- return inventoryModel.findOne({ id: id })
-}
-async function deleteItem(item) {
- return inventoryModel.findOneAndDelete({ item: item })
-}
+async function findItem(itemName) {
+    try {
+      const item = await inventoryModel.findOne({ Item: itemName }); // Use the correct field name, "Item"
+      return item || null; // Return the item or null if not found
+    } catch (error) {
+      console.error('Error finding item:', error);
+      throw error; // Propagate the error for the calling function to handle
+    }
+  }
+  
+  async function deleteItem(itemName) {
+    try {
+      const result = await inventoryModel.deleteOne({ Item: itemName }); // Use the correct field name, "Item"
+      return result.deletedCount > 0; // Return true if an item was deleted
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      throw error;
+    }
+  }
 export default {
  findItem,
  findItemByID,
  addItem,
  deleteItem,
  getItems,
- getItem,
 }
