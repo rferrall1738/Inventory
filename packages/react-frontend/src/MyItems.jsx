@@ -25,7 +25,7 @@ const MyItems = () => {
      `https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items/ownedby/${id}`
     )
     if (!items.ok) {
-     throw new Error(`Error fetching items: status ${response.status}`)
+     throw new Error(`Error fetching items: status ${items.status}`)
     }
     const data = await items.json()
     setItems(data)

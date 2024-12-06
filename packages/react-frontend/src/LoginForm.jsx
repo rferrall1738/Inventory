@@ -67,10 +67,6 @@ function UserLogin() {
       password: event.target.elements.password.value
     };
 
-    //Debug statements
-    console.log("Email", loginData.email);
-    console.log('Password:', loginData.password);
-
     function transitionHome(data)
     {
       setSuccessMessage("Login Successful. Redirecting...");

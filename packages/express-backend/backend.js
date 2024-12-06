@@ -131,9 +131,17 @@ app.post('/login/:email_id', async (req, res) => {
   const emailID = req.params['email_id']
   const { Item: itemID } = req.body
   try {
-    const response = await userServices.addItem(emailID, itemID)
-    res.status(200).send("Item added to user")
-    // TODO: Also set item as "claimed"
+    const user = await userServices.findUserById(emailID)
+    const updatedUser = await userServices.addItem(emailID, itemID)
+    console.log("updated user id:", updatedUser.myitems)
+    console.log("initial user id", user.myitems)
+    if (user.myitems.length == (updatedUser.myitems.length))
+    {
+      res.status(204).send("You have already claimed this item")
+    }
+    else{
+      res.status(201).send("Item added to inventory")
+    }
   } catch {
     res.status(404).send('User not found.')
   }
@@ -147,12 +155,22 @@ app.get('/items/ownedby/:email_id', async (req, res) => {
     const sentList = []
     for (let i = 0; i < user.myitems.length; i++)
     {
-      const item = await inventoryServices.findItemByID(itemList[i])
-      if (item != null)
-      {
-        sentList.push(item)
+      try {
+        const item = await inventoryServices.findItemByID(itemList[i])
+        if (item != null)
+        {
+          const isItemInList = sentList.some(
+            listItem => listItem._id.equals(item._id) // Using ObjectId comparison
+          );
+          if (!isItemInList)
+          {
+            sentList.push(item)
+          }
+        }
       }
-
+      catch {
+        res.status(404).send("Item not found")
+      }
     }
     res.status(200).send(sentList)
   } catch {
