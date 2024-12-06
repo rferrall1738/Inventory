@@ -186,6 +186,13 @@ function UserLogin() {
     <label htmlFor="showPassword" style={styles.checkboxLabel}>
       Show Password
       </label>
+      <button
+      type="button"
+      onClick={() => window.location.href = "/reset-password"} // Add desired functionality
+      style={styles.forgetPasswordButton}
+    >
+      Forgot Password?
+    </button>
       </div>
       </div>
           <button type="submit" style={styles.button}>
@@ -244,6 +251,14 @@ const styles = {
   },
   buttonHover: {
     backgroundColor: '#154c24', // Darker green on hover
+  },
+  forgetPasswordButton: {
+    border:'none',
+    background: 'none',
+    color: '#1e4d2b', // Cal Poly green
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    fontSize: '14px',
   },
   label: {
     color: '#333', // Dark neutral for readability
