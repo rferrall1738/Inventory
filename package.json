@@ -12,7 +12,9 @@
     "lint": "npx eslint . && npx prettier --check .",
     "test": "npx jest",
     "dev": "npx nodemon backend.js",
-    "start": "node backend.js"
+    "start": "node backend.js",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "devDependencies": {
     "@eslint/js": "^8.57.1",
