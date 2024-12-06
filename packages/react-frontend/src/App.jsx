@@ -1,10 +1,8 @@
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import HomePage from './HomePage'
 import UserLogin from './LoginForm'
 import Item from './Item'
 import UserSignup from './SignUpPage'
-import SendPasswordResetEmail from './EmailResetPassForm';
 import ProtectedRoutes from './ProtectedRoutes'
 import CreateItem from './CreateItem';
 import Verification from './Verification';
@@ -19,7 +17,6 @@ function App() {
                 <Route path="/" element={<UserLogin />} />   {/* Login page */}
                 <Route path="/login" element={<UserLogin />} /> {/* page */}
                 <Route path="/signup" element={<UserSignup />} /> {/*Signup page */}
-                <Route path="/reset-password" element={<SendPasswordResetEmail />} /> {/*Email Reset Link page */}
                 <Route path="/verify-email" element={<Verification />} /> {/* Verification page */}
                 {/* Private Routes */}
                 <Route element={<ProtectedRoutes isAuthenticated={isAuthenticated} />}>

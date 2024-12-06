@@ -261,39 +261,6 @@ app.delete('/items/:id', async (req, res) => {
  }
 })
 
-app.post("/reset-password", async (req, res) => {
-  console.log("Received request to /reset-password");
-  console.log("Request body: ", req.body)
-  const {email} = req.body;
-
-  if (!email) {
-    res.status(400).json({message: "Enter Email."});
-  } 
-
-  try {
-    console.log("Trying email");
-    const user = await userServices.findUserByEmail(email);
-    if (!user) {
-      console.log("incorrect email")
-      return res.status(404).json({message: "User not found."})
-    }
-
-    console.log("got to this point")
-
-    const token = jwt.sign({email}, process.env.SECRET_KEY, {expiresIn: "5m"});
-
-    const link = `https://localhost:5173/reset-password/${token}`;
-
-    console.log("token successfully created")
-
-    return res.status(200).json({link});
-
-  } catch {
-    console.log("failed to create token, check credentials or create new account")
-    return res.status(500).json({message: "Internal Server Error"});
-  }
-});
-
 // eslint-disable-next-line no-unused-vars
 function authorizeUser(req, res, next) {
  const authHeader = req.headers['authorization']
