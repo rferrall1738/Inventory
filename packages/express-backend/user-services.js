@@ -15,6 +15,7 @@ async function addUser(user) {
  console.log('OG password', user.password)
  const saltRounds = 10
  user.password = await bcrypt.hash(user.password, saltRounds)
+ user.myitems = []
  console.log('Hashed Password', user.password)
 
  const userToAdd = new userModel(user)
@@ -36,10 +37,17 @@ function deleteUser(id) {
  return userModel.findByIdAndDelete(id)
 }
 
+function addItem(user_id, item_id) {
+  const updatedItemArray = { $push: { myitems: item_id} };
+  const updatedUser = userModel.findByIdAndUpdate(user_id, updatedItemArray, {new: true});
+  return updatedUser
+}
+
 export default {
  addUser,
  findUserById,
  getUsers,
  deleteUser,
  findUserByEmail,
+ addItem
 }

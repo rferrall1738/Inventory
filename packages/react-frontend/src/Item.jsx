@@ -30,22 +30,53 @@ const Item = () => {
         window.location.href = "/home";
     };
 
-    const handleClaim = async () => {
-        try {
-          const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items/${id}`, {
-            method: "DELETE",
-          });
-          if (!response.ok) {
-            throw new Error(`Error deleting item: status ${response.status}`);
-          }
-          window.alert("Your item is ready for pickup at the ASI desk!");
-          setClaimed(true);
-          window.location.href = "/home"; // Redirect immediately
-        } catch (error) {
-          console.error("Error deleting item:", error);
+    const claimItem = async () => {
+      const emailID = localStorage.getItem("emailID");
+      const itemID = {
+        Item: item._id
+      }
+      console.log("user ID:", emailID);
+      console.log("Item id:", itemID);
+      try {
+        // const response = await fetch(`http://localhost:8000/login/${emailID}`,
+        const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/login/${emailID}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(itemID),
+        });
+
+        if (!response.ok) {
+          throw new Error('Unable to claim item');
         }
-      };
-      
+        else{
+          alert("Item claimed!");
+          window.location.href = "/home";
+        }
+      }
+      catch (error) {
+        console.error("Error", error);
+      }
+    }
+
+  
+//       const handleClaim = async () => {
+//         try {
+//           const response = await fetch(`https://polyfinder-api-htfsexgcfde6dwby.westus3-01.azurewebsites.net/items/${id}`, {
+//             method: "DELETE",
+//           });
+//           if (!response.ok) {
+//             throw new Error(`Error deleting item: status ${response.status}`);
+//           }
+//           window.alert("Your item is ready for pickup at the ASI desk!");
+//           setClaimed(true);
+//           window.location.href = "/home"; // Redirect immediately
+//         } catch (error) {
+//           console.error("Error deleting item:", error);
+//         }
+//       };
 
     if (loading) {
         return <div>Loading item details...</div>;
@@ -60,30 +91,30 @@ const Item = () => {
     }
 
     return (
-        <div style={styles.container}>
-            <div style={styles.fixedHeader}>
-                <button style={styles.backButton} onClick={back}>{"\u2190"}</button>
-                <h1 style={styles.title}>POLYFINDER</h1>
-                <img src="polyfinder.png" style={styles.profileImage} />
-            </div>
-            <div style={styles.content}>
-                <h2 style={styles.itemTitle}>{item.Item}</h2>
-                {item.Image ? (
-                    <img src={item.Image} alt={item.Item} style={styles.image} />
-                ) : (
-                    <div style={styles.imagePlaceholder}>No Image Available</div>
-                )}
-                <div style={styles.info}>
-                    <p><strong>Status:</strong> {item.Status}</p>
-                    <p><strong>Date:</strong> {item.Date}</p>
-                    <p><strong>Category:</strong> {item.Category}</p>
-                    <p><strong>Location:</strong> 📍 {item.Location}</p>
-                    <SmallMap lat={item.Lat} lng={item.Lng} />
-                </div>
-                <button style={styles.claimButton} onClick={handleClaim}>Claim This Item</button>
-            </div>
-        </div>
-    );
+      <div style={styles.container}>
+          <div style={styles.fixedHeader}>
+              <button style={styles.backButton} onClick={back}>{"\u2190"}</button>
+              <h1 style={styles.title}>POLYFINDER</h1>
+              <img src="polyfinder.png" style={styles.profileImage}/>
+          </div>
+          <div style={styles.content}>
+              <h2 style={styles.itemTitle}>{item.Item}</h2>
+              {item.Image ? (
+                  <img src={item.Image} alt={item.Item} style={styles.image} />
+              ) : (
+                  <div style={styles.imagePlaceholder}>No Image Available</div>
+              )}
+              <div style={styles.info}>
+                  <p><strong>Status:</strong> {item.Status}</p>
+                  <p><strong>Date:</strong> {item.Date}</p>
+                  <p><strong>Category:</strong> {item.Category}</p>
+                  <p><strong>Location:</strong> 📍 {item.Location}</p>
+                  <SmallMap lat={item.Lat} lng={item.Lng} />
+              </div>
+              <button style={styles.claimButton} onClick={claimItem}>Claim This Item</button>
+          </div>
+      </div>
+  );
 };
 
 const styles = {

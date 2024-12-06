@@ -21,6 +21,11 @@ const UserSchema = new mongoose.Schema(
      throw new Error('Invalid password must be at least 8 characters.')
    },
   },
+  myitems: {
+    type: Array,
+    required: true,
+    default: [],
+  }
  },
  { collection: 'Login' }
 )

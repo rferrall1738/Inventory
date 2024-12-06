@@ -75,6 +75,7 @@ function UserLogin() {
     {
       setSuccessMessage("Login Successful. Redirecting...");
       setErrorMessage('');
+      localStorage.setItem("emailID", data.user._id);
       localStorage.setItem("token", data.token);
       console.log('Login successful:', data);
   

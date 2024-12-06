@@ -114,6 +114,52 @@ app.post('/login', async (req, res) => {
  }
 })
 
+app.get('/login/:email_id', async (req, res) => {
+  const emailID = req.params['email_id'];
+  const result = await userServices.findUserById(emailID);
+  if (result === undefined || result === null)
+  {
+    res.status(404).send('Resource not found.');
+  }
+  else
+  {
+    res.send(result);
+  }
+})
+
+app.post('/login/:email_id', async (req, res) => {
+  const emailID = req.params['email_id']
+  const { Item: itemID } = req.body
+  try {
+    const response = await userServices.addItem(emailID, itemID)
+    res.status(200).send("Item added to user")
+    // TODO: Also set item as "claimed"
+  } catch {
+    res.status(404).send('User not found.')
+  }
+})
+
+app.get('/items/ownedby/:email_id', async (req, res) => {
+  const emailID = req.params['email_id']
+  try{
+    const user = await userServices.findUserById(emailID)
+    const itemList = user.myitems
+    const sentList = []
+    for (let i = 0; i < user.myitems.length; i++)
+    {
+      const item = await inventoryServices.findItemByID(itemList[i])
+      if (item != null)
+      {
+        sentList.push(item)
+      }
+
+    }
+    res.status(200).send(sentList)
+  } catch {
+    res.status(404).send("User not found")
+  }
+})
+
 app.get('/login', async (req, res) => {
  try {
   const users = await userServices.getUsers()
