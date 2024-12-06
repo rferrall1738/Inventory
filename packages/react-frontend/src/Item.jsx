@@ -52,8 +52,15 @@ const Item = () => {
           throw new Error('Unable to claim item');
         }
         else{
-          alert("Item claimed!");
-          window.location.href = "/home";
+          if (response.status == 204) //Item has already been claimed
+          {
+            alert("You have already claimed this item!")
+          }
+          else
+          {
+            alert("Item claimed!");
+            window.location.href = "/home";
+          }
         }
       }
       catch (error) {

@@ -37,10 +37,21 @@ function deleteUser(id) {
  return userModel.findByIdAndDelete(id)
 }
 
-function addItem(user_id, item_id) {
-  const updatedItemArray = { $push: { myitems: item_id} };
-  const updatedUser = userModel.findByIdAndUpdate(user_id, updatedItemArray, {new: true});
-  return updatedUser
+async function addItem(user_id, item_id) {
+  const user = await userModel.findById(user_id);
+  const itemList = user.myitems;
+
+  if (itemList.includes(item_id))
+  {
+    return user;
+  }
+  else
+  {
+    const updatedItemArray = { $push: { myitems: item_id} };
+    const updatedUser = userModel.findByIdAndUpdate(user_id, updatedItemArray, {new: true});
+    return updatedUser;
+  }
+
 }
 
 export default {
