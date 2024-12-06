@@ -64,28 +64,28 @@ function getItems() {
  return inventoryModel.find({})
 }
 async function findItem(itemName) {
-    try {
-      const item = await inventoryModel.findOne({ Item: itemName }); // Use the correct field name, "Item"
-      return item || null; // Return the item or null if not found
-    } catch (error) {
-      console.error('Error finding item:', error);
-      throw error; // Propagate the error for the calling function to handle
-    }
-  }
-  
-  async function deleteItem(itemName) {
-    try {
-      const result = await inventoryModel.deleteOne({ Item: itemName }); // Use the correct field name, "Item"
-      return result.deletedCount > 0; // Return true if an item was deleted
-    } catch (error) {
-      console.error('Error deleting item:', error);
-      throw error;
-    }
-  }
+ try {
+  const item = await inventoryModel.findOne({ Item: itemName })
+  return item || null
+ } catch (error) {
+  console.error('Error finding item:', error)
+  throw error
+ }
+}
+
+async function deleteItemByID(itemId) {
+ try {
+  const result = await inventoryModel.deleteOne({ _id: itemId })
+  return result.deletedCount > 0 
+ } catch (error) {
+  console.error('Error deleting item by ID:', error)
+  throw error
+ }
+}
 export default {
  findItem,
  findItemByID,
  addItem,
- deleteItem,
+ deleteItemByID,
  getItems,
 }

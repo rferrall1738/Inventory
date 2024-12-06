@@ -189,35 +189,31 @@ app.post('/create-item', upload.single('image'), async (req, res) => {
  }
 })
 
-app.delete('/items/:item', async (req, res) => {
-  try {
-    const { item } = req.params;
+app.delete('/items/:id', async (req, res) => {
+ try {
+  const { id } = req.params
 
-    // Debugging the item parameter
-    console.log('Request to delete item:', item);
+  console.log('Request to delete item by ID:', id)
 
-    // Find the item in the database
-    const itemToDelete = await inventoryServices.findItem(item);
+  const itemToDelete = await inventoryServices.findItemByID(id)
 
-    if (!itemToDelete) {
-      return res.status(404).json({ message: 'Item not found.' });
-    }
-
-    // Delete the item
-    const deletedItem = await inventoryServices.deleteItem(item);
-
-    if (deletedItem) {
-      console.log('Item deleted successfully:', item);
-      return res.status(200).json({ message: 'Item deleted successfully.' });
-    } else {
-      return res.status(500).json({ message: 'Failed to delete the item.' });
-    }
-  } catch (error) {
-    console.error('Error deleting item:', error);
-    return res.status(500).json({ message: 'Internal Server Error.' });
+  if (!itemToDelete) {
+   return res.status(404).json({ message: 'Item not found.' })
   }
-});
+  
+  const deletedItem = await inventoryServices.deleteItemByID(id)
 
+  if (deletedItem) {
+   console.log('Item deleted successfully:', id)
+   return res.status(200).json({ message: 'Item deleted successfully.' })
+  } else {
+   return res.status(500).json({ message: 'Failed to delete the item.' })
+  }
+ } catch (error) {
+  console.error('Error deleting item by ID:', error)
+  return res.status(500).json({ message: 'Internal Server Error.' })
+ }
+})
 
 // eslint-disable-next-line no-unused-vars
 function authorizeUser(req, res, next) {
